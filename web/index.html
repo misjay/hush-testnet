@@ -1,0 +1,1326 @@
+<title>Hush Testnet</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the incognito newspaper. Light, illustrated, left-aligned. Hero = headline + working market card beside the spy illustration; product shown immediately below. */
+:root{
+  color-scheme: light;
+  --paper:#F4F3FF; --white:#FFFFFF; --ink:#16143B; --ink-2:#55527A; --line:#DEDBF3;
+  --blue:#2C2CD8; --blue-deep:#1D1DA6; --blue-soft:#E4E4FF;
+  --lemon:#FFE14A; --lemon-soft:#FFF6C7; --pink:#FF9EC4; --pink-soft:#FFE4EF;
+  --yes:#0E9F5E; --yes-soft:#DDF5E9; --no:#E5402F; --no-soft:#FDE6E3;
+  --f:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-code:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --gl:max(16px, env(safe-area-inset-left, 0px)); --gr:max(16px, env(safe-area-inset-right, 0px));
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{background:var(--paper);color:var(--ink)}
+body{font-family:var(--f);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--paper)}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:8px}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1200px;margin:0 auto;padding-left:var(--gl);padding-right:var(--gr)}
+.wide{font-stretch:125%;font-weight:900;letter-spacing:-.02em;line-height:.95;text-wrap:balance;margin:0}
+.num{font-variant-numeric:tabular-nums}
+.code{font-family:var(--f-code)}
+.muted{color:var(--ink-2)}
+.example{display:inline-block;font-size:13px;font-weight:600;color:var(--blue);background:var(--blue-soft);border-radius:999px;padding:3px 10px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border-radius:12px;padding:15px 24px;font-weight:700;font-size:16px;text-decoration:none;border:2px solid transparent;transition:transform .15s, background .15s, border-color .15s}
+.btn:active{transform:translateY(1px)}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-blue:hover{background:var(--blue-deep)}
+.btn-lemon{background:var(--lemon);color:var(--ink)}
+.btn-lemon:hover{background:#FFD71A}
+.btn-line{background:var(--white);border-color:var(--line);color:var(--ink)}
+.btn-line:hover{border-color:var(--ink)}
+.btn-sm{padding:9px 14px;font-size:14px;border-radius:10px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn svg{width:18px;height:18px}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(244,243,255,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-block:12px}
+.logo{display:inline-flex;align-items:center;gap:10px;font-stretch:125%;font-weight:900;font-size:24px;letter-spacing:-.03em;text-decoration:none;color:var(--ink);background:none;border:0;padding:0}
+.logo svg{width:34px;height:34px}
+.net{font-stretch:100%;font-weight:700;font-size:12px;letter-spacing:0;background:var(--lemon);color:var(--ink);border:1.5px solid var(--ink);border-radius:999px;padding:2px 8px;margin-left:2px}
+.mfoot a{color:inherit;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+.mfoot a:hover{color:var(--ink)}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{text-decoration:none;font-weight:500;color:var(--ink-2)}
+.nav-links a:hover{color:var(--ink)}
+@media (max-width:820px){.nav-links a{display:none}}
+
+/* hero */
+.hero{padding-block:40px 112px}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center}
+.hero h1{font-size:clamp(46px,6.2vw,88px)}
+.hero .sub{font-size:19px;color:var(--ink-2);max-width:46ch;margin:24px 0 32px}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap}
+.checks{list-style:none;padding:0;margin:28px 0 0;display:flex;flex-wrap:wrap;gap:10px 22px;font-weight:500;font-size:15px}
+.checks li{display:flex;align-items:center;gap:8px}
+.checks svg{width:20px;height:20px;flex:none}
+.art{position:relative}
+.art > svg{width:100%;height:auto;display:block;max-width:560px;margin-left:auto}
+.hero-card{position:absolute;left:-4%;bottom:-64px;width:min(290px,56%)}
+@media (max-width:920px){.hero-grid{grid-template-columns:1fr}.art > svg{margin:0 auto;max-width:440px}.hero-card{position:relative;left:auto;bottom:auto;width:100%;max-width:440px;margin:0 auto 20px;order:-1}.art{display:flex;flex-direction:column}.hero-grid{gap:28px}.art > svg{max-width:340px}}
+
+/* market card */
+.mcard{background:var(--white);border:1.5px solid var(--line);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px;transition:border-color .2s, transform .2s}
+.mcard:hover{border-color:var(--ink);transform:translateY(-2px)}
+.mcard.sel{border-color:var(--blue);box-shadow:0 0 0 4px var(--blue-soft)}
+.hero-card .mcard{box-shadow:0 18px 50px -20px rgba(22,20,59,.35);border-color:var(--ink);border-width:2px}
+.mtop{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;color:var(--ink-2)}
+.cat{font-weight:600;padding:3px 10px;border-radius:999px;background:var(--blue-soft);color:var(--blue-deep)}
+.cat.Economy{background:var(--lemon-soft);color:#7A5B00}
+.cat.Sports{background:var(--yes-soft);color:#0A6E41}
+.cat.Culture{background:var(--pink-soft);color:#A3245A}
+.cat.Zcash-native{background:var(--ink);color:var(--lemon)}
+.mq{margin:0;font-weight:600;font-size:17px;line-height:1.35;min-height:46px;text-wrap:pretty}
+.mmid{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.pct{font-stretch:125%;font-weight:900;font-size:40px;line-height:1;letter-spacing:-.03em;transition:color .5s}
+.pct small{font-stretch:100%;font-size:14px;font-weight:500;color:var(--ink-2);letter-spacing:0;margin-left:4px}
+.pct.up{color:var(--yes)}.pct.down{color:var(--no)}
+.spark{width:110px;height:38px;display:block}
+.yn{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.yn button{border:0;border-radius:12px;padding:11px 12px;font-weight:700;font-size:15px;display:flex;justify-content:space-between;font-variant-numeric:tabular-nums;transition:background .15s, color .15s}
+.b-yes{background:var(--yes-soft);color:var(--yes)}
+.b-yes:hover,.b-yes.on{background:var(--yes);color:#fff}
+.b-no{background:var(--no-soft);color:var(--no)}
+.b-no:hover,.b-no.on{background:var(--no);color:#fff}
+.mfoot{font-size:13px;color:var(--ink-2);display:flex;justify-content:space-between;gap:8px}
+
+/* sections */
+.band{padding-block:clamp(72px,9vw,128px)}
+.band.white{background:var(--white);border-block:1px solid var(--line)}
+.sec-h{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:36px}
+.sec-h h2{font-size:clamp(32px,4.4vw,56px);max-width:16ch}
+.sec-h p{margin:12px 0 0;max-width:52ch;color:var(--ink-2)}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+@media (max-width:1080px){.grid4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.grid4{grid-template-columns:1fr}}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.step{display:flex;flex-direction:column;gap:14px}
+.step svg{width:100%;height:auto;display:block;border-radius:28px}
+.step-t{display:flex;gap:12px;align-items:center}
+.step-n{width:34px;height:34px;flex:none;border-radius:50%;background:var(--ink);color:var(--lemon);display:grid;place-items:center;font-weight:900;font-stretch:125%;font-size:15px}
+.step h3{margin:0;font-size:22px;font-weight:800;font-stretch:112%;letter-spacing:-.01em}
+.step p{margin:0;color:var(--ink-2);font-size:16px;max-width:38ch}
+.inline-link{color:var(--blue);font-weight:600;white-space:nowrap}
+@media (max-width:860px){.steps{grid-template-columns:1fr}}
+
+/* compare */
+.compare{width:100%;border-collapse:separate;border-spacing:0;background:var(--white);border:1.5px solid var(--line);border-radius:24px;overflow:hidden}
+.compare th,.compare td{padding:18px 20px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
+.compare tr:last-child td,.compare tr:last-child th{border-bottom:0}
+.compare thead th{font-size:15px;font-weight:600;color:var(--ink-2);background:var(--paper)}
+.compare thead th.hush{background:var(--blue);color:#fff;font-stretch:125%;font-weight:900;font-size:18px}
+.compare td.hush{background:rgba(44,44,216,.05);font-weight:600}
+.compare td span{display:inline-flex;align-items:center;gap:8px}
+.compare svg{width:20px;height:20px;flex:none}
+.cmp-wrap{overflow-x:auto}
+.cmp-wrap table{min-width:560px}
+@media (max-width:600px){.cmp-wrap table{min-width:0;font-size:14px}.compare th,.compare td{padding:12px 10px}.compare svg{display:none}.compare thead th.hush{font-size:15px}}
+
+/* trust */
+.trust{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:48px;align-items:center}
+.trust svg.ill{width:100%;height:auto;max-width:440px;display:block;margin:0 auto}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:28px}
+.fact{background:var(--paper);border-radius:18px;padding:16px}
+.fact b{display:block;font-stretch:125%;font-weight:900;font-size:28px;letter-spacing:-.03em;line-height:1.1}
+.fact span{font-size:14px;color:var(--ink-2)}
+@media (max-width:860px){.trust{grid-template-columns:1fr}.facts{grid-template-columns:1fr}}
+
+/* faq */
+.faq{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
+.faq details{background:var(--white);border:1.5px solid var(--line);border-radius:18px;padding:18px 20px}
+.faq details[open]{border-color:var(--ink)}
+.faq summary{cursor:pointer;list-style:none;font-weight:700;font-size:18px;display:flex;justify-content:space-between;gap:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"";width:22px;height:22px;flex:none;border-radius:50%;background:var(--blue-soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232C2CD8' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M12 6v12M6 12h12'/%3E%3C/svg%3E") center/14px no-repeat;transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq p{margin:10px 0 0;color:var(--ink-2)}
+@media (max-width:760px){.faq{grid-template-columns:1fr}}
+
+/* final */
+.final{background:var(--blue);color:#fff;overflow:hidden;position:relative}
+.final .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:32px;align-items:end;padding-block:clamp(64px,8vw,104px) 0}
+.final h2{font-size:clamp(40px,5.6vw,80px);color:#fff}
+.final p{color:#D9D9FF;max-width:44ch;margin:20px 0 28px;font-size:18px}
+.final .copy{padding-bottom:clamp(64px,8vw,104px)}
+.final svg{width:100%;height:auto;display:block;max-width:440px;margin-left:auto}
+@media (max-width:820px){.final .wrap{grid-template-columns:1fr}.final svg{margin:0 auto}.final .copy{padding-bottom:0}}
+footer{padding-block:28px;font-size:14px;color:var(--ink-2)}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* sticky mobile cta */
+.sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:45;padding:12px var(--gr) calc(12px + env(safe-area-inset-bottom,0px)) var(--gl);background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .3s}
+.sticky-cta.on{transform:none}
+.sticky-cta .btn{width:100%}
+@media (min-width:821px){.sticky-cta{display:none}}
+
+/* faucet page */
+.faucet-hero .art > svg{max-width:500px}
+.drip{animation:drip 2s cubic-bezier(.5,0,.8,.4) infinite;transform-box:fill-box}
+.drip.d2{animation-delay:1s}
+@keyframes drip{0%{transform:translateY(-14px);opacity:0}15%{opacity:1}75%{opacity:1}100%{transform:translateY(80px);opacity:0}}
+.fsteps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.fsteps li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:18px;padding:28px 0;border-top:1.5px solid var(--line)}
+.fsteps li:last-child{border-bottom:1.5px solid var(--line)}
+.fsteps h3{margin:4px 0 8px;font-size:22px;font-weight:800;font-stretch:112%}
+.fsteps p{margin:0 0 12px;color:var(--ink-2);max-width:62ch}
+.fsteps .code{font-size:14px;background:var(--paper);padding:1px 6px;border-radius:6px;color:var(--ink)}
+.small-note{font-size:15px}
+.small-note a,.faq a{color:var(--blue)}
+.faucets{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:720px}
+.faucet{background:var(--paper);border:1.5px solid var(--line);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:10px}
+.faucet b{font-size:17px}
+.faucet span{font-size:14px;color:var(--ink-2)}
+.faucet .btn{align-self:flex-start}
+@media (max-width:640px){.faucets{grid-template-columns:1fr}}
+
+/* ============ APP ============ */
+.appbar .wrap{gap:22px}
+@media (max-width:640px){.appbar .wrap{flex-wrap:wrap;gap:10px 12px}.appbar .tabs{order:3;width:100%}.appbar .tabs button{flex:1}}
+.tabs{display:flex;gap:4px;background:var(--white);border:1.5px solid var(--line);border-radius:12px;padding:4px}
+.tabs button{border:0;background:none;padding:7px 16px;border-radius:9px;font-weight:600;color:var(--ink-2)}
+.tabs button[aria-selected="true"]{background:var(--ink);color:#fff}
+.spacer{flex:1}
+.bal{display:flex;align-items:center;gap:12px}
+.bal-v{text-align:right;line-height:1.15}
+.bal-v b{display:block;font-stretch:125%;font-weight:900;font-size:18px;font-variant-numeric:tabular-nums}
+.bal-v span{font-size:12px;color:var(--ink-2)}
+@media (max-width:640px){.appbar .logo span{display:none}.bal-v span{display:none}}
+.demo-note{background:var(--lemon);font-size:14px;font-weight:500}
+.demo-note .wrap{padding-block:8px}
+.dn-short{display:none}
+@media (max-width:640px){.dn-long{display:none}.dn-short{display:inline}}
+.app-grid{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:32px;padding-block:32px 96px;align-items:start}
+@media (max-width:1040px){.app-grid{grid-template-columns:1fr}}
+.app-h{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.app-h h1{font-size:clamp(36px,4.6vw,56px)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.filters button{border:1.5px solid var(--line);background:var(--white);border-radius:999px;padding:7px 14px;font-weight:600;font-size:14px;color:var(--ink-2)}
+.filters button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.search{display:flex;align-items:center;gap:8px;background:var(--white);border:1.5px solid var(--line);border-radius:12px;padding:0 12px;min-width:240px}
+.search:focus-within{border-color:var(--blue)}
+.search input{border:0;background:transparent;outline:none;padding:10px 0;flex:1;min-width:0}
+.app .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:640px){.app .grid2{grid-template-columns:1fr}}
+.empty{padding:40px 20px;text-align:center;color:var(--ink-2);background:var(--white);border:1.5px dashed var(--line);border-radius:20px;grid-column:1/-1}
+
+/* ticket */
+.ticket{position:sticky;top:calc(env(safe-area-inset-top,0px) + 84px);background:var(--white);border:2px solid var(--ink);border-radius:24px;overflow:hidden}
+.t-head{background:var(--blue);color:#fff;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.t-head h2{margin:0;font-stretch:125%;font-weight:900;font-size:24px;letter-spacing:-.02em}
+.t-head p{margin:2px 0 0;font-size:14px;color:#D9D9FF}
+.t-head svg{width:56px;height:56px;flex:none}
+.t-body{padding:20px;display:flex;flex-direction:column;gap:14px;position:relative}
+.t-q{font-weight:600;line-height:1.4}
+.side{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.side button{border:0;border-radius:12px;padding:13px 14px;font-weight:700;display:flex;justify-content:space-between;font-variant-numeric:tabular-nums}
+.stake{display:flex;align-items:center;gap:6px;background:var(--paper);border:2px solid var(--line);border-radius:14px;padding:4px 14px}
+.stake:focus-within{border-color:var(--blue)}
+.stake span{font-stretch:125%;font-weight:900;font-size:28px;color:var(--ink-2)}
+.stake input{flex:1;min-width:0;border:0;background:transparent;outline:none;font-stretch:125%;font-weight:900;font-size:36px;letter-spacing:-.03em;padding:6px 0}
+.chips{display:flex;gap:6px}
+.chips button{flex:1;border:1.5px solid var(--line);background:var(--white);border-radius:10px;padding:8px 0;font-weight:600;font-size:14px}
+.chips button:hover{border-color:var(--ink)}
+.quote{display:flex;flex-direction:column;gap:8px;background:var(--paper);border-radius:16px;padding:14px 16px;font-variant-numeric:tabular-nums}
+.quote div{display:flex;justify-content:space-between;font-size:15px}
+.quote span{color:var(--ink-2)}
+.quote b{font-weight:600}
+.quote .pay{padding-top:8px;border-top:1.5px dashed var(--line)}
+.quote .pay b{font-stretch:125%;font-weight:900;font-size:24px;color:var(--yes)}
+.qtimer{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink-2)}
+.qtimer svg{width:20px;height:20px;transform:rotate(-90deg)}
+.avail{display:flex;justify-content:space-between;font-size:14px;color:var(--ink-2);margin-bottom:-6px}
+.avail b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.t-done{padding:24px 20px 26px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px}
+.t-done svg{width:120px;height:auto}
+.t-done h3{margin:0;font-stretch:125%;font-weight:900;font-size:28px;letter-spacing:-.02em}
+.t-done p{margin:0;color:var(--ink-2);max-width:32ch}
+.t-done .row-btns{width:100%;flex-direction:column}
+.t-done .btn{width:100%}
+.remind{background:var(--lemon);border:2px solid var(--ink);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;font-size:15px}
+.remind .btn{align-self:flex-start}
+.err{color:var(--no);font-size:14px;font-weight:500;min-height:1.3em;margin:0}
+.place{width:100%;padding:17px;font-size:17px}
+.stamp{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%) rotate(-10deg);border:4px solid var(--blue);color:var(--blue);background:rgba(255,255,255,.9);font-stretch:125%;font-weight:900;font-size:38px;letter-spacing:-.02em;padding:4px 22px;border-radius:12px;pointer-events:none;opacity:0}
+.stamp.go{animation:stamp 1.7s cubic-bezier(.2,.9,.2,1)}
+@keyframes stamp{0%{opacity:0;transform:translate(-50%,-50%) rotate(-10deg) scale(1.9)}14%{opacity:1;transform:translate(-50%,-50%) rotate(-10deg) scale(1)}75%{opacity:1}100%{opacity:0}}
+.t-empty{padding:28px 22px 32px;text-align:center;color:var(--ink-2);display:flex;flex-direction:column;align-items:center;gap:12px}
+.t-empty svg{width:150px;height:auto}
+.t-close{display:none;border:0;background:rgba(255,255,255,.18);color:#fff;border-radius:10px;width:36px;height:36px;font-size:20px;line-height:1}
+@media (max-width:1040px){
+  .ticket{position:fixed;left:0;right:0;bottom:0;top:auto;z-index:55;border-radius:24px 24px 0 0;border-width:2px 0 0;max-height:88vh;overflow:auto;transform:translateY(105%);transition:transform .35s cubic-bezier(.2,.8,.2,1);box-shadow:0 -24px 60px rgba(22,20,59,.25);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  .ticket.open{transform:none}
+  .t-close{display:block}
+  .t-head svg{display:none}
+}
+
+/* vault */
+.vault{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+@media (max-width:820px){.vault{grid-template-columns:1fr}}
+.panel{background:var(--white);border:1.5px solid var(--line);border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.panel h2{margin:0;font-size:20px;font-weight:800;font-stretch:112%}
+.big{font-stretch:125%;font-weight:900;font-size:clamp(48px,6vw,68px);letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.row-btns{display:flex;gap:10px;flex-wrap:wrap}
+.secret{background:var(--lemon);border-color:var(--ink);border-width:2px;position:relative;overflow:hidden}
+.secret svg.key{position:absolute;right:-10px;top:-6px;width:120px;height:auto}
+.secret p{margin:0;font-size:15px;max-width:34ch}
+.claim{font-family:var(--f-code);font-size:16px;font-weight:500;background:var(--white);border:2px solid var(--ink);border-radius:12px;padding:14px;word-break:break-all;transition:filter .3s}
+.claim.blur{filter:blur(7px);user-select:none}
+.ptable{width:100%;border-collapse:collapse;font-size:15px;font-variant-numeric:tabular-nums}
+.ptable th{text-align:left;font-weight:600;font-size:13px;color:var(--ink-2);padding:0 12px 10px 0}
+.ptable td{padding:13px 12px 13px 0;border-top:1px solid var(--line);vertical-align:top}
+.ptable td{white-space:nowrap}.ptable td.q{min-width:220px;white-space:normal}
+.tbl{overflow-x:auto}
+.tag{font-weight:700;font-size:13px;padding:3px 9px;border-radius:8px}
+.tag.yes{background:var(--yes-soft);color:var(--yes)}.tag.no{background:var(--no-soft);color:var(--no)}
+.pos{color:var(--yes);font-weight:600}.neg{color:var(--no);font-weight:600}
+.res{font-weight:700;font-size:13px;padding:3px 9px;border-radius:8px;background:var(--paper);color:var(--ink-2)}
+.txid{font-size:12px;color:var(--ink-2)}
+.res.won{background:var(--yes);color:#fff}.res.lost{background:var(--no-soft);color:var(--no)}.res.void{background:var(--lemon-soft);color:#7A5B00}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:80;background:rgba(22,20,59,.45);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px var(--gr) 20px var(--gl)}
+.modal-card{width:min(460px,100%);max-height:90vh;overflow:auto;background:var(--white);border:2px solid var(--ink);border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:14px;animation:rise .3s cubic-bezier(.2,.8,.2,1)}
+@keyframes rise{from{transform:translateY(14px);opacity:0}}
+.m-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.m-head h3{margin:0;font-stretch:125%;font-weight:900;font-size:24px;letter-spacing:-.02em;line-height:1.1}
+.x{border:1.5px solid var(--line);background:var(--white);border-radius:10px;width:36px;height:36px;font-size:20px;line-height:1;flex:none}
+.qr{width:200px;height:200px;display:block;margin:0 auto;border-radius:14px;border:2px solid var(--ink)}
+.addr{font-family:var(--f-code);font-size:13px;word-break:break-all;background:var(--paper);border-radius:12px;padding:12px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:14px;font-weight:600}
+.field input{background:var(--paper);border:2px solid var(--line);border-radius:12px;padding:12px 14px;outline:none;font-size:15px;width:100%;min-width:0}
+.field input.code{font-family:var(--f-code);font-size:14px}
+.field input:focus{border-color:var(--blue)}
+.dep-live{display:flex;flex-direction:column;gap:14px}
+.restore{display:flex;flex-direction:column;gap:8px;border-top:1.5px dashed var(--ink);padding-top:14px;margin-top:4px}
+.restore label{font-weight:600;font-size:14px}
+.restore .row-btns{flex-wrap:nowrap}
+.restore input{flex:1;min-width:0;background:#fff;border:2px solid var(--ink);border-radius:10px;padding:9px 12px;font-family:var(--f-code);font-size:13px;outline:none}
+.restore input:focus{border-color:var(--blue)}
+.pk-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:15px;font-weight:600}
+.restore #pk-signin{align-self:flex-start}
+.linkbtn{background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:3px;font-size:14px;align-self:flex-start;color:var(--ink)}
+.pk-box{background:var(--blue-soft);border:2px solid var(--blue);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.pk-box span{font-size:15px;color:var(--ink-2)}
+.pk-box .btn{align-self:flex-start}
+.pk-done{color:var(--yes)!important;font-weight:600}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:500}
+.check input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--blue);flex:none}
+.mini-steps{margin:0;padding-left:20px;color:var(--ink-2);display:flex;flex-direction:column;gap:4px;font-size:15px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,160%);visibility:hidden;z-index:90;background:var(--ink);color:#fff;padding:13px 18px;border-radius:14px;font-weight:600;font-size:15px;transition:transform .35s cubic-bezier(.2,.8,.2,1);max-width:calc(100% - 32px)}
+.toast.show{transform:translate(-50%,0);visibility:visible}
+
+.blink{transform-box:fill-box;transform-origin:center;animation:blink 4.6s infinite}
+@keyframes blink{0%,94%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
+</style>
+
+<!-- ================= LANDING ================= -->
+<div id="landing">
+  <header class="nav">
+    <div class="wrap">
+      <a class="logo" href="#top" aria-label="Hush home"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="2" y="6" width="36" height="28" rx="6" fill="#fff" stroke="#16143B" stroke-width="3"/><circle cx="14" cy="18" r="5" fill="#16143B"/><circle cx="26" cy="18" r="5" fill="#16143B"/><circle class="pupil" data-r="2" cx="14" cy="18" r="2.2" fill="#fff"/><circle class="pupil" data-r="2" cx="26" cy="18" r="2.2" fill="#fff"/><path d="M10 28h20" stroke="#16143B" stroke-width="2.5" stroke-linecap="round"/></svg>Hush<span class="net">Testnet</span></a>
+      <nav class="nav-links" aria-label="Sections">
+        <a href="#markets">Markets</a>
+        <a href="#how">How it works</a>
+        <a href="#why">Why Hush</a>
+        <a href="#faucet" data-go="faucet">Get testnet ZEC</a>
+        <button class="btn btn-blue btn-sm" data-go="app">Place a private bet</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <h1 class="wide">Bet on what happens next. Privately.</h1>
+          <p class="sub">Live Polymarket markets, played with shielded testnet ZEC. No sign-up, no ID, no wallet connect. Learn the whole private flow, from deposit to payout, with nothing real at stake.</p>
+          <div class="hero-ctas">
+            <button class="btn btn-blue" data-go="app">Place a private bet <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+            <a class="btn btn-line" href="#markets">Browse markets</a>
+          </div>
+          <ul class="checks">
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#0E9F5E"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>No account or ID</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#0E9F5E"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Live Polymarket prices</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#0E9F5E"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Testnet, no real money</li>
+          </ul>
+        </div>
+
+        <div class="art">
+          <svg viewBox="0 0 540 560" role="img" aria-label="A spy in a trench coat peeks through eye holes cut in a newspaper called The Daily Odds">
+            <circle cx="290" cy="270" r="236" fill="#FFE14A"/>
+            <path d="M84 120l7 18 18 7-18 7-7 18-7-18-18-7 18-7z" fill="#2C2CD8"/>
+            <path d="M486 196l5 12 12 5-12 5-5 12-5-12-12-5 12-5z" fill="#16143B"/>
+            <circle cx="470" cy="420" r="6" fill="#2C2CD8"/>
+            <rect x="228" y="440" width="38" height="78" rx="10" fill="#16143B"/>
+            <rect x="314" y="440" width="38" height="78" rx="10" fill="#16143B"/>
+            <ellipse cx="240" cy="520" rx="36" ry="13" fill="#16143B"/>
+            <ellipse cx="342" cy="520" rx="36" ry="13" fill="#16143B"/>
+            <path d="M170 474L188 252Q195 206 236 194L290 184L344 194Q385 206 392 252L410 474Z" fill="#2C2CD8" stroke="#16143B" stroke-width="4" stroke-linejoin="round"/>
+            <path d="M290 300V474" stroke="#16143B" stroke-width="4"/>
+            <rect x="178" y="398" width="224" height="24" fill="#1D1DA6" stroke="#16143B" stroke-width="4"/>
+            <rect x="276" y="394" width="30" height="32" rx="4" fill="#FFE14A" stroke="#16143B" stroke-width="4"/>
+            <circle cx="308" cy="346" r="6" fill="#FFE14A" stroke="#16143B" stroke-width="3"/>
+            <circle cx="308" cy="450" r="6" fill="#FFE14A" stroke="#16143B" stroke-width="3"/>
+            <path d="M218 132Q222 70 290 66Q358 70 362 132Z" fill="#16143B"/>
+            <rect x="220" y="114" width="140" height="16" fill="#FF9EC4"/>
+            <ellipse cx="290" cy="134" rx="126" ry="21" fill="#16143B"/>
+            <circle cx="170" cy="306" r="24" fill="#FF9EC4" stroke="#16143B" stroke-width="4"/>
+            <circle cx="410" cy="300" r="24" fill="#FF9EC4" stroke="#16143B" stroke-width="4"/>
+            <g transform="rotate(-5 290 270)">
+              <rect x="170" y="152" width="240" height="246" rx="6" fill="#fff" stroke="#16143B" stroke-width="4"/>
+              <path d="M290 156V394" stroke="#DEDBF3" stroke-width="3"/>
+              <text x="290" y="186" text-anchor="middle" fill="#16143B" style="font:900 19px Archivo, sans-serif;font-stretch:125%;letter-spacing:.5px">THE DAILY ODDS</text>
+              <path d="M186 196H394M186 202H394" stroke="#16143B" stroke-width="2"/>
+              <circle cx="254" cy="236" r="19" fill="#16143B"/>
+              <circle cx="326" cy="236" r="19" fill="#16143B"/>
+              <g class="blink"><circle cx="254" cy="236" r="13" fill="#fff"/><circle cx="326" cy="236" r="13" fill="#fff"/></g>
+              <circle class="pupil" data-r="6" cx="254" cy="236" r="6.5" fill="#16143B"/>
+              <circle class="pupil" data-r="6" cx="326" cy="236" r="6.5" fill="#16143B"/>
+              <text x="290" y="296" text-anchor="middle" fill="#16143B" style="font:900 27px Archivo, sans-serif;font-stretch:125%">WILL IT</text>
+              <text x="290" y="326" text-anchor="middle" fill="#16143B" style="font:900 27px Archivo, sans-serif;font-stretch:125%">HAPPEN?</text>
+              <rect x="186" y="342" width="92" height="7" rx="3.5" fill="#DEDBF3"/>
+              <rect x="186" y="356" width="80" height="7" rx="3.5" fill="#DEDBF3"/>
+              <rect x="186" y="370" width="88" height="7" rx="3.5" fill="#DEDBF3"/>
+              <path d="M302 378l18-14 14 8 22-22 18 6" fill="none" stroke="#2C2CD8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="302" y="342" width="72" height="7" rx="3.5" fill="#DEDBF3"/>
+            </g>
+            <ellipse cx="190" cy="300" rx="10" ry="15" fill="#FF9EC4" stroke="#16143B" stroke-width="4"/>
+            <ellipse cx="392" cy="292" rx="10" ry="15" fill="#FF9EC4" stroke="#16143B" stroke-width="4"/>
+            <path d="M390 58h104a26 26 0 010 52h-70l-18 18v-18h-16a26 26 0 010-52z" fill="#fff" stroke="#16143B" stroke-width="4" stroke-linejoin="round"/>
+            <text x="442" y="93" text-anchor="middle" fill="#16143B" style="font:900 24px Archivo, sans-serif;font-stretch:125%">shh…</text>
+            <g transform="translate(96 360)"><circle r="28" fill="#fff" stroke="#16143B" stroke-width="4"/><path d="M-9-10h18L-9 10H9M0-15v5M0 10v5" fill="none" stroke="#2C2CD8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g>
+            <g transform="translate(140 438)"><circle r="18" fill="#fff" stroke="#16143B" stroke-width="4"/><path d="M-6-6h12L-6 6H6" fill="none" stroke="#2C2CD8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g>
+          </svg>
+          <div class="hero-card" id="hero-card"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band white" id="markets" aria-labelledby="mk-title">
+      <div class="wrap">
+        <div class="sec-h">
+          <div><h2 class="wide" id="mk-title">Popular right now</h2><p>Markets and prices come straight from Polymarket. Pick a side and you're in. <span class="example price-src">Example prices</span></p></div>
+          <button class="btn btn-line" data-go="app">See all markets</button>
+        </div>
+        <div class="grid4" id="landing-markets"></div>
+      </div>
+    </section>
+
+    <section class="band" id="how" aria-labelledby="how-title">
+      <div class="wrap">
+        <div class="sec-h"><div><h2 class="wide" id="how-title">Your first bet in three steps</h2><p>Nothing to sign up for. Your vault opens the moment you arrive.</p></div></div>
+        <div class="steps">
+          <article class="step">
+            <svg viewBox="0 0 320 220" aria-hidden="true">
+              <rect width="320" height="220" fill="#FFE14A"/>
+              <path d="M40 40l5 12 12 5-12 5-5 12-5-12-12-5 12-5z" fill="#16143B"/>
+              <rect x="86" y="96" width="148" height="98" rx="10" fill="#fff" stroke="#16143B" stroke-width="4"/>
+              <path d="M86 104l74 50 74-50" fill="none" stroke="#16143B" stroke-width="4" stroke-linejoin="round"/>
+              <path d="M138 96h44" stroke="#16143B" stroke-width="10" stroke-linecap="round"/>
+              <g transform="translate(160 56)"><circle r="26" fill="#2C2CD8" stroke="#16143B" stroke-width="4"/><path d="M-9-10h18L-9 10H9M0-15v5M0 10v5" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g>
+              <path d="M118 46l-14-6M118 62h-16M202 46l14-6M202 62h16" stroke="#16143B" stroke-width="4" stroke-linecap="round"/>
+              <path d="M214 170l12 4v10c0 8-5 13-12 16-7-3-12-8-12-16v-10z" fill="#FF9EC4" stroke="#16143B" stroke-width="3"/>
+            </svg>
+            <div class="step-t"><span class="step-n">1</span><h3>Drop in some ZEC</h3></div>
+            <p>Grab free testnet ZEC from a faucet and send it from a testnet wallet. It lands in your vault as test dollars at the live ZEC price. <a href="#faucet" data-go="faucet" class="inline-link">Get testnet ZEC</a></p>
+          </article>
+          <article class="step">
+            <svg viewBox="0 0 320 220" aria-hidden="true">
+              <rect width="320" height="220" fill="#FFE4EF"/>
+              <g transform="rotate(8 200 112)"><rect x="160" y="52" width="96" height="124" rx="12" fill="#FDE6E3" stroke="#16143B" stroke-width="4"/><text x="208" y="112" text-anchor="middle" fill="#E5402F" style="font:900 26px Archivo, sans-serif;font-stretch:125%">NO</text><text x="208" y="140" text-anchor="middle" fill="#16143B" style="font:600 15px Archivo, sans-serif">36¢</text></g>
+              <g transform="rotate(-7 128 112)"><rect x="70" y="44" width="110" height="136" rx="12" fill="#0E9F5E" stroke="#16143B" stroke-width="4"/><text x="125" y="108" text-anchor="middle" fill="#fff" style="font:900 30px Archivo, sans-serif;font-stretch:125%">YES</text><text x="125" y="138" text-anchor="middle" fill="#fff" style="font:600 16px Archivo, sans-serif">64¢</text></g>
+              <path d="M150 150l0 46 11-11 9 21 9-4-9-21h16z" fill="#fff" stroke="#16143B" stroke-width="4" stroke-linejoin="round"/>
+              <path d="M132 158l-12-8M128 172h-14M140 146l-6-12" stroke="#16143B" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+            <div class="step-t"><span class="step-n">2</span><h3>Pick Yes or No</h3></div>
+            <p>Choose a market, type a dollar amount and see exactly what you'd win. The price holds for ten seconds while you decide.</p>
+          </article>
+          <article class="step">
+            <svg viewBox="0 0 320 220" aria-hidden="true">
+              <rect width="320" height="220" fill="#E4E4FF"/>
+              <path d="M40 150c40-60 120-90 190-70" fill="none" stroke="#16143B" stroke-width="3" stroke-dasharray="6 8" stroke-linecap="round"/>
+              <g transform="rotate(-12 196 100)"><rect x="140" y="62" width="120" height="80" rx="10" fill="#fff" stroke="#16143B" stroke-width="4"/><path d="M140 70l60 40 60-40" fill="none" stroke="#16143B" stroke-width="4" stroke-linejoin="round"/><circle cx="200" cy="112" r="15" fill="#FF9EC4" stroke="#16143B" stroke-width="4"/><path d="M194 112h12M200 106v12" stroke="#16143B" stroke-width="3" stroke-linecap="round"/></g>
+              <path d="M112 112l-20-4M116 128l-22 4M124 96l-14-12" stroke="#16143B" stroke-width="4" stroke-linecap="round"/>
+              <g transform="translate(70 168)"><circle r="20" fill="#FFE14A" stroke="#16143B" stroke-width="4"/><path d="M-7-7h14L-7 7H7" fill="none" stroke="#16143B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></g>
+              <g transform="translate(262 172)"><circle r="16" fill="#FFE14A" stroke="#16143B" stroke-width="4"/><path d="M-5-5h10L-5 5H5" fill="none" stroke="#16143B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g>
+            </svg>
+            <div class="step-t"><span class="step-n">3</span><h3>Get paid, quietly</h3></div>
+            <p>When the real market resolves on Polymarket, each winning share pays $1. Withdraw any time and Hush sends shielded testnet ZEC back.</p>
+          </article>
+        </div>
+        <div style="margin-top:40px"><button class="btn btn-blue" data-go="app">Open my vault</button></div>
+      </div>
+    </section>
+
+    <section class="band white" id="why" aria-labelledby="why-title">
+      <div class="wrap">
+        <div class="sec-h"><div><h2 class="wide" id="why-title">Same markets, none of the exposure</h2><p>On most prediction markets your bets live on a public ledger tied to your wallet. Hush keeps them between you and your secret code.</p></div></div>
+        <div class="cmp-wrap">
+          <table class="compare">
+            <thead><tr><th scope="col"><span class="sr">Feature</span></th><th scope="col">Typical prediction market</th><th scope="col" class="hush">Hush</th></tr></thead>
+            <tbody id="cmp"></tbody>
+          </table>
+        </div>
+        <div class="trust" style="margin-top:72px">
+          <svg class="ill" viewBox="0 0 400 320" aria-hidden="true">
+            <circle cx="200" cy="170" r="140" fill="#E4E4FF"/>
+            <rect x="96" y="70" width="208" height="200" rx="18" fill="#2C2CD8" stroke="#16143B" stroke-width="4"/>
+            <rect x="116" y="90" width="168" height="160" rx="10" fill="#1D1DA6" stroke="#16143B" stroke-width="4"/>
+            <circle cx="200" cy="170" r="44" fill="#FFE14A" stroke="#16143B" stroke-width="4"/>
+            <circle cx="200" cy="170" r="10" fill="#16143B"/>
+            <path d="M200 132v12M200 196v12M162 170h12M226 170h12" stroke="#16143B" stroke-width="4" stroke-linecap="round"/>
+            <rect x="290" y="128" width="14" height="40" rx="5" fill="#FFE14A" stroke="#16143B" stroke-width="4"/>
+            <rect x="120" y="270" width="30" height="16" rx="4" fill="#16143B"/><rect x="250" y="270" width="30" height="16" rx="4" fill="#16143B"/>
+            <g transform="translate(300 74)"><circle r="34" fill="#0E9F5E" stroke="#16143B" stroke-width="4"/><path d="M-14 1l9 9 19-19" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></g>
+          </svg>
+          <div>
+            <h2 class="wide" style="font-size:clamp(30px,3.8vw,46px)">Real markets. Test money. Zero risk.</h2>
+            <p class="muted" style="max-width:52ch;margin:18px 0 0">Hush testnet mirrors live Polymarket markets, prices and results. You bet with Zcash testnet coins, which have no value, so you can try private betting end to end before mainnet.</p>
+            <div class="facts">
+              <div class="fact"><b>Live</b><span>Prices and results from Polymarket</span></div>
+              <div class="fact"><b>$0</b><span>Real money at risk on testnet</span></div>
+              <div class="fact"><b>10s</b><span>Price hold on every quote</span></div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="faq-title">
+      <div class="wrap">
+        <div class="sec-h"><div><h2 class="wide" id="faq-title">Questions people ask first</h2></div></div>
+        <div class="faq">
+          <details open><summary>Do I really not need an account?</summary><p>Really. Hush opens a vault for you with a secret code. Whoever holds the code controls the vault, so keep it safe. Hush can't recover a lost one.</p></details>
+          <details><summary>Why is my balance in dollars?</summary><p>Your testnet ZEC is valued at the live ZEC price when it arrives, so bets feel like the real thing. When you withdraw, Hush sends back testnet ZEC at the price at that moment.</p></details>
+          <details><summary>Where do the markets come from?</summary><p>Most are mirrored from Polymarket, including prices and how they resolve. Zcash-native markets are run by Hush and settled from public chain data.</p></details>
+          <details><summary>Is any of this real money?</summary><p>No. Hush is running on Zcash testnet, so every coin is a free testnet coin with no value. The markets, prices and results are real, copied from Polymarket.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="final" aria-labelledby="final-title">
+      <div class="wrap">
+        <div class="copy">
+          <h2 class="wide" id="final-title">Your bet. Nobody else's business.</h2>
+          <p>Open a vault in seconds, fund it with free testnet ZEC and pick your first market. No forms, no waiting, no risk.</p>
+          <button class="btn btn-lemon" data-go="app">Place a private bet</button>
+        </div>
+        <svg viewBox="0 0 440 300" aria-hidden="true">
+          <path d="M60 300V170Q60 120 110 112L220 98L330 112Q380 120 380 170V300Z" fill="#16143B"/>
+          <path d="M120 120Q124 40 220 34Q316 40 320 120Z" fill="#16143B"/>
+          <rect x="122" y="98" width="196" height="18" fill="#FF9EC4"/>
+          <ellipse cx="220" cy="122" rx="176" ry="26" fill="#16143B"/>
+          <rect x="70" y="150" width="300" height="160" rx="8" fill="#fff" stroke="#16143B" stroke-width="4" transform="rotate(4 220 230)"/>
+          <g transform="rotate(4 220 230)">
+            <circle cx="180" cy="196" r="22" fill="#16143B"/><circle cx="262" cy="196" r="22" fill="#16143B"/>
+            <g class="blink"><circle cx="180" cy="196" r="15" fill="#fff"/><circle cx="262" cy="196" r="15" fill="#fff"/></g>
+            <circle class="pupil" data-r="7" cx="180" cy="196" r="7.5" fill="#16143B"/><circle class="pupil" data-r="7" cx="262" cy="196" r="7.5" fill="#16143B"/>
+            <text x="220" y="262" text-anchor="middle" fill="#16143B" style="font:900 26px Archivo, sans-serif;font-stretch:125%">PSST. OVER HERE.</text>
+          </g>
+          <circle cx="62" cy="230" r="26" fill="#FF9EC4" stroke="#16143B" stroke-width="4"/>
+          <circle cx="380" cy="244" r="26" fill="#FF9EC4" stroke="#16143B" stroke-width="4"/>
+        </svg>
+      </div>
+    </section>
+  </main>
+  <footer><div class="wrap"><span>Hush, private prediction markets on Zcash. <a href="#faucet" data-go="faucet" class="inline-link">Get testnet ZEC</a></span><span>Testnet. Markets and prices from Polymarket; balances are testnet ZEC with no value. Hush is not affiliated with Polymarket.</span></div></footer>
+  <div class="sticky-cta" id="sticky"><button class="btn btn-blue" data-go="app">Place a private bet</button></div>
+</div>
+
+<!-- ================= GET TESTNET ZEC ================= -->
+<div id="faucet-view" hidden>
+  <header class="nav">
+    <div class="wrap">
+      <button class="logo" data-go="landing" aria-label="Back to Hush home"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="2" y="6" width="36" height="28" rx="6" fill="#fff" stroke="#16143B" stroke-width="3"/><circle cx="14" cy="18" r="5" fill="#16143B"/><circle cx="26" cy="18" r="5" fill="#16143B"/><circle class="pupil" data-r="2" cx="14" cy="18" r="2.2" fill="#fff"/><circle class="pupil" data-r="2" cx="26" cy="18" r="2.2" fill="#fff"/><path d="M10 28h20" stroke="#16143B" stroke-width="2.5" stroke-linecap="round"/></svg>Hush<span class="net">Testnet</span></button>
+      <nav class="nav-links" aria-label="Sections">
+        <a href="#markets" data-go="landing">Markets</a>
+        <button class="btn btn-blue btn-sm" data-go="app">Open my vault</button>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section class="hero faucet-hero">
+      <div class="wrap hero-grid">
+        <div>
+          <h1 class="wide">Get free testnet ZEC</h1>
+          <p class="sub">Hush runs on Zcash testnet, so you play with TAZ, a free test coin with no value. A faucet sends you some in a few minutes. Then you send it to your Hush vault and start betting.</p>
+          <div class="hero-ctas">
+            <a class="btn btn-blue" id="faucet-primary" target="_blank" rel="noopener">Open the faucet <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+            <button class="btn btn-line" data-go="app">Open my vault</button>
+          </div>
+          <ul class="checks">
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#0E9F5E"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Free, no sign-up</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#0E9F5E"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Testnet coins only</li>
+          </ul>
+        </div>
+        <div class="art">
+          <svg viewBox="0 0 520 460" role="img" aria-label="A tap drips ZEC coins into a cup labelled TAZ while the spy watches from behind his newspaper">
+            <circle cx="270" cy="230" r="200" fill="#FFE14A"/>
+            <path d="M92 96l6 15 15 6-15 6-6 15-6-15-15-6 15-6z" fill="#2C2CD8"/>
+            <path d="M462 300l5 11 11 5-11 5-5 11-5-11-11-5 11-5z" fill="#16143B"/>
+            <rect x="140" y="64" width="40" height="120" rx="8" fill="#16143B"/>
+            <path d="M160 96h120a40 40 0 0140 40v26h-40v-14a12 12 0 00-12-12H160z" fill="#2C2CD8" stroke="#16143B" stroke-width="4" stroke-linejoin="round"/>
+            <rect x="196" y="70" width="44" height="18" rx="6" fill="#FF9EC4" stroke="#16143B" stroke-width="4"/>
+            <path d="M218 88v8" stroke="#16143B" stroke-width="4"/>
+            <rect x="276" y="162" width="48" height="14" rx="4" fill="#1D1DA6" stroke="#16143B" stroke-width="4"/>
+            <g class="drip"><circle cx="300" cy="206" r="14" fill="#fff" stroke="#16143B" stroke-width="4"/><path d="M295 201h10l-10 10h10" fill="none" stroke="#2C2CD8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g>
+            <g class="drip d2"><circle cx="300" cy="206" r="14" fill="#fff" stroke="#16143B" stroke-width="4"/><path d="M295 201h10l-10 10h10" fill="none" stroke="#2C2CD8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g>
+            <path d="M238 278h124l-14 132a12 12 0 01-12 11h-72a12 12 0 01-12-11z" fill="#fff" stroke="#16143B" stroke-width="4" stroke-linejoin="round"/>
+            <path d="M248 318h104" stroke="#DEDBF3" stroke-width="3"/>
+            <text x="300" y="372" text-anchor="middle" fill="#16143B" style="font:900 30px Archivo, sans-serif;font-stretch:125%">TAZ</text>
+            <g transform="translate(300 292)"><circle r="12" fill="#FFE14A" stroke="#16143B" stroke-width="3"/></g>
+            <g transform="translate(276 300)"><circle r="10" fill="#FFE14A" stroke="#16143B" stroke-width="3"/></g>
+            <g transform="translate(324 302)"><circle r="10" fill="#FFE14A" stroke="#16143B" stroke-width="3"/></g>
+            <g transform="translate(420 330)">
+              <rect x="-50" y="-58" width="100" height="92" rx="5" fill="#fff" stroke="#16143B" stroke-width="4" transform="rotate(6)"/>
+              <g transform="rotate(6)">
+                <circle cx="-20" cy="-26" r="11" fill="#16143B"/><circle cx="20" cy="-26" r="11" fill="#16143B"/>
+                <g class="blink"><circle cx="-20" cy="-26" r="7" fill="#fff"/><circle cx="20" cy="-26" r="7" fill="#fff"/></g>
+                <circle class="pupil" data-r="3.5" cx="-20" cy="-26" r="3.6" fill="#16143B"/><circle class="pupil" data-r="3.5" cx="20" cy="-26" r="3.6" fill="#16143B"/>
+                <rect x="-36" y="-2" width="72" height="6" rx="3" fill="#DEDBF3"/><rect x="-36" y="10" width="54" height="6" rx="3" fill="#DEDBF3"/>
+              </g>
+              <path d="M-40 -66Q-38 -96 0 -98Q38 -96 40 -66Z" fill="#16143B" transform="rotate(6)"/>
+              <ellipse cx="0" cy="-64" rx="62" ry="12" fill="#16143B" transform="rotate(6)"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="band white" aria-labelledby="fsteps-title">
+      <div class="wrap">
+        <div class="sec-h"><div><h2 class="wide" id="fsteps-title">From faucet to first bet</h2><p>About ten minutes, most of it waiting for the testnet to confirm.</p></div></div>
+        <ol class="fsteps">
+          <li>
+            <span class="step-n">1</span>
+            <div><h3>Get a testnet wallet address</h3>
+              <p>You need a Zcash wallet that can run on testnet. Testnet addresses start with <span class="code">utest1</span> (unified) or <span class="code">ztestsapling1</span> (shielded). If your wallet shows <span class="code">u1</span> or <span class="code">zs1</span>, it's on mainnet. Switch it to testnet first.</p>
+              <p class="small-note">Developers can use <a href="https://github.com/zingolabs/zingolib" target="_blank" rel="noopener">zingo-cli</a> with <span class="code">--chain testnet</span>.</p></div>
+          </li>
+          <li>
+            <span class="step-n">2</span>
+            <div><h3>Ask a faucet for TAZ</h3>
+              <p>Paste your testnet address into a faucet. Each opens in a new tab. If one is empty or down, try the other.</p>
+              <div class="faucets" id="faucet-list"></div></div>
+          </li>
+          <li>
+            <span class="step-n">3</span>
+            <div><h3>Send it to your Hush vault</h3>
+              <p>Open your vault, tap Deposit and send your TAZ to the shielded address shown there. Your vault is credited in test dollars at the live ZEC price once it confirms.</p>
+              <button class="btn btn-blue btn-sm" data-go="app" data-then="deposit">Open my deposit address</button></div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="fhelp-title">
+      <div class="wrap faq">
+        <details open><summary>Both faucets are empty. What now?</summary><p>Testnet faucets are run by volunteers and sometimes run dry. Ask for a few TAZ in the <a href="https://forum.zcashcommunity.com/" target="_blank" rel="noopener">Zcash Community Forum</a>; people there regularly send testnet coins to builders. Your $250 practice balance works in the meantime.</p></details>
+        <details><summary>Can I send real ZEC to Hush testnet?</summary><p>No. Never send mainnet ZEC to a testnet address. It won't arrive and can't be recovered. Hush testnet only works with TAZ.</p></details>
+        <details><summary>Are testnet coins worth anything?</summary><p>No. TAZ exists only for testing. That's why you can learn private betting on Hush with nothing at stake.</p></details>
+        <details><summary>How long does it take?</summary><p>Faucets usually send within a few minutes. A deposit to Hush shows up after a few testnet confirmations, often under ten minutes.</p></details>
+      </div>
+    </section>
+  </main>
+  <footer><div class="wrap"><span>Hush, private prediction markets on Zcash testnet</span><span>Faucets are run by the Zcash community, not by Hush. Hush is not affiliated with Polymarket.</span></div></footer>
+</div>
+
+<!-- ================= APP ================= -->
+<div id="app" class="app" hidden>
+  <header class="nav appbar">
+    <div class="wrap">
+      <button class="logo" data-go="landing" aria-label="Back to Hush home"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="2" y="6" width="36" height="28" rx="6" fill="#fff" stroke="#16143B" stroke-width="3"/><circle cx="14" cy="18" r="5" fill="#16143B"/><circle cx="26" cy="18" r="5" fill="#16143B"/><circle class="pupil" data-r="2" cx="14" cy="18" r="2.2" fill="#fff"/><circle class="pupil" data-r="2" cx="26" cy="18" r="2.2" fill="#fff"/><path d="M10 28h20" stroke="#16143B" stroke-width="2.5" stroke-linecap="round"/></svg><span>Hush</span><span class="net">Testnet</span></button>
+      <div class="tabs" role="tablist" aria-label="App sections">
+        <button role="tab" id="tab-markets" aria-selected="true" aria-controls="view-markets">Markets</button>
+        <button role="tab" id="tab-vault" aria-selected="false" aria-controls="view-vault">Vault</button>
+      </div>
+      <span class="spacer"></span>
+      <div class="bal"><div class="bal-v"><b id="bal-pill">$250.00</b><span>In your vault</span></div><button class="btn btn-blue btn-sm" id="open-deposit">Deposit</button></div>
+    </div>
+  </header>
+  <div class="demo-note"><div class="wrap"><span class="dn-long">Testnet: you bet with testnet ZEC, which has no value. <span class="price-src-note">Markets are examples until live data loads.</span> Your vault starts with $250 to practice.</span><span class="dn-short">Testnet with a $250 practice vault. No real money.</span></div></div>
+
+  <div class="wrap app-grid">
+    <div style="min-width:0">
+      <section id="view-markets" role="tabpanel" aria-labelledby="tab-markets">
+        <div class="app-h"><h1 class="wide">Markets</h1><label class="search" for="q"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="q" type="search" placeholder="Search markets" autocomplete="off"></label></div>
+        <div class="filters" id="filters" role="group" aria-label="Filter by category"></div>
+        <div class="grid2" id="app-markets"></div>
+      </section>
+      <section id="view-vault" role="tabpanel" aria-labelledby="tab-vault" hidden>
+        <div class="app-h"><h1 class="wide">Your vault</h1><span class="example">Test balance</span></div>
+        <div class="vault">
+          <div class="panel">
+            <h2>Balance</h2>
+            <div class="big" id="bal-big">$250.00</div>
+            <div class="muted" id="bal-sub" style="font-size:15px">Open positions worth $0.00</div>
+            <div class="row-btns"><button class="btn btn-blue btn-sm" id="open-deposit-2">Deposit ZEC</button><button class="btn btn-line btn-sm" id="open-withdraw">Withdraw</button></div>
+          </div>
+          <div class="panel secret">
+            <svg class="key" viewBox="0 0 120 90" aria-hidden="true"><circle cx="34" cy="40" r="22" fill="#fff" stroke="#16143B" stroke-width="4"/><circle cx="34" cy="40" r="8" fill="#FFE14A" stroke="#16143B" stroke-width="4"/><path d="M56 40h52v14M92 40v10" fill="none" stroke="#16143B" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <h2>Your secret code</h2>
+            <p>This code is your vault. Whoever holds it can spend from it, and Hush can't recover it if it's lost.</p>
+            <div class="claim blur" id="claim"></div>
+            <div class="row-btns"><button class="btn btn-line btn-sm" id="reveal">Show code</button><button class="btn btn-line btn-sm" id="copy-claim">Copy code</button></div>
+            <div class="pk-row" id="pk-row" hidden><span id="pk-count">No passkeys yet</span><button class="btn btn-line btn-sm" id="pk-add">Add a passkey</button></div>
+            <form class="restore" id="restore-form" novalidate hidden>
+              <button type="button" class="btn btn-line btn-sm" id="pk-signin" hidden>Sign in with a passkey</button>
+              <label for="restore-code">Have a code from another device?</label>
+              <div class="row-btns"><input id="restore-code" placeholder="hush-XXXX-XXXX-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false"><button class="btn btn-line btn-sm" type="submit">Open vault</button></div>
+              <p class="err" id="restore-err" role="alert"></p>
+              <button type="button" class="linkbtn" id="forget">Forget the code on this device</button>
+            </form>
+          </div>
+          <div class="panel" style="grid-column:1/-1"><h2>Open positions</h2><div class="tbl" id="positions"></div></div>
+          <div class="panel" id="wallet-panel" style="grid-column:1/-1" hidden><h2>Deposits and withdrawals</h2><div class="tbl" id="wallet-act"></div></div>
+          <div class="panel" id="settled-panel" style="grid-column:1/-1" hidden><h2>Settled</h2><p class="muted" style="margin:0;font-size:15px">Markets settle to Polymarket's result. Winning shares pay $1 each.</p><div class="tbl" id="settled"></div></div>
+        </div>
+      </section>
+    </div>
+
+    <aside class="ticket" id="ticket" aria-label="Bet ticket">
+      <div class="t-head">
+        <div><h2>Your ticket</h2><p id="t-sub">Pick Yes or No to start</p></div>
+        <svg viewBox="0 0 56 56" aria-hidden="true"><rect x="4" y="10" width="48" height="36" rx="7" fill="#fff" stroke="#16143B" stroke-width="3"/><circle cx="20" cy="26" r="6" fill="#16143B"/><circle cx="36" cy="26" r="6" fill="#16143B"/><circle class="pupil" data-r="2.5" cx="20" cy="26" r="2.6" fill="#fff"/><circle class="pupil" data-r="2.5" cx="36" cy="26" r="2.6" fill="#fff"/><path d="M16 38h24" stroke="#16143B" stroke-width="3" stroke-linecap="round"/></svg>
+        <button class="t-close" id="t-close" aria-label="Close ticket">×</button>
+      </div>
+      <div class="t-empty" id="t-empty">
+        <svg viewBox="0 0 160 120" aria-hidden="true"><g transform="rotate(-8 60 60)"><rect x="24" y="20" width="64" height="84" rx="10" fill="#DDF5E9" stroke="#16143B" stroke-width="4"/><text x="56" y="70" text-anchor="middle" fill="#0E9F5E" style="font:900 20px Archivo, sans-serif;font-stretch:125%">YES</text></g><g transform="rotate(8 104 60)"><rect x="76" y="20" width="64" height="84" rx="10" fill="#FDE6E3" stroke="#16143B" stroke-width="4"/><text x="108" y="70" text-anchor="middle" fill="#E5402F" style="font:900 20px Archivo, sans-serif;font-stretch:125%">NO</text></g></svg>
+        <span>Choose a side on any market and your ticket fills in here.</span>
+      </div>
+      <div class="t-body" id="t-body" hidden>
+        <div class="t-q" id="t-q"></div>
+        <div class="side" role="group" aria-label="Choose side">
+          <button class="b-yes on" id="side-yes" aria-pressed="true"><span>Yes</span><span id="px-yes"></span></button>
+          <button class="b-no" id="side-no" aria-pressed="false"><span>No</span><span id="px-no"></span></button>
+        </div>
+        <div class="avail"><label for="stake">Stake in dollars</label><span>Available <b id="avail">$250.00</b></span></div>
+        <div class="stake"><span>$</span><input id="stake" inputmode="decimal" value="25" autocomplete="off"></div>
+        <div class="chips"><button data-add="10">+$10</button><button data-add="25">+$25</button><button data-add="100">+$100</button><button data-max>Max</button></div>
+        <div class="quote">
+          <div><span>Price per share</span><b id="qt-price">—</b></div>
+          <div><span>Shares</span><b id="qt-shares">—</b></div>
+          <div><span>Hush spread</span><b id="qt-fee">—</b></div>
+          <div class="pay"><span>You win</span><b id="qt-pay">—</b></div>
+        </div>
+        <div class="qtimer"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--line)" stroke-width="3"/><circle id="qring" cx="12" cy="12" r="9" fill="none" stroke="var(--blue)" stroke-width="3" stroke-dasharray="56.5" stroke-dashoffset="0"/></svg><span id="qtext">Price held for 10 seconds</span></div>
+        <p class="err" id="t-err" role="alert"></p>
+        <button class="btn btn-blue place" id="place">Place bet</button>
+      </div>
+      <div class="t-done" id="t-done" hidden>
+        <svg viewBox="0 0 160 120" aria-hidden="true"><rect x="22" y="30" width="116" height="78" rx="10" fill="#fff" stroke="#16143B" stroke-width="4"/><path d="M22 38l58 38 58-38" fill="none" stroke="#16143B" stroke-width="4" stroke-linejoin="round"/><g transform="translate(118 30)"><circle r="22" fill="#0E9F5E" stroke="#16143B" stroke-width="4"/><path d="M-9 1l6 6 12-12" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
+        <h3>You're in.</h3>
+        <p id="done-text"></p>
+        <div class="row-btns"><button class="btn btn-blue" id="done-vault">See it in your vault</button><button class="btn btn-line" id="done-again">Place another bet</button></div>
+      </div>
+      <div class="stamp" id="stamp" aria-hidden="true">Placed!</div>
+    </aside>
+  </div>
+</div>
+
+<div class="modal" id="m-deposit" hidden role="dialog" aria-modal="true" aria-labelledby="dep-title">
+  <div class="modal-card">
+    <div class="m-head"><h3 id="dep-title">Deposit testnet ZEC</h3><button class="x" data-close aria-label="Close">×</button></div>
+    <div class="remind"><span><b>First, save your secret code.</b> It's your backup way into this vault.</span><button class="btn btn-line btn-sm" id="copy-claim-2">Copy secret code</button></div>
+    <p class="muted" id="dep-soon" hidden style="margin:0">Deposits aren’t switched on for this server yet. Until they are, practise with your $250 test balance.</p>
+    <div id="dep-live" class="dep-live"><canvas class="qr" id="qr" width="400" height="400" aria-label="Deposit address code"></canvas>
+    <div class="addr" id="dep-addr"></div>
+    <p class="muted" id="dep-confs" style="margin:0;font-size:14px" hidden></p></div>
+    <div class="row-btns"><button class="btn btn-line btn-sm" id="copy-addr">Copy address</button><button class="btn btn-blue btn-sm" id="sim-dep">Simulate a 0.1 TAZ deposit</button></div>
+    <ol class="mini-steps"><li>Get free testnet ZEC from a faucet. <a href="#faucet" data-go="faucet" class="inline-link">Where to get it</a></li><li>Send it from a testnet wallet to this shielded address.</li><li>Your vault is credited in test dollars at the live ZEC price.</li></ol>
+    <p class="muted" style="margin:0;font-size:14px">Testnet only. Never send mainnet ZEC here; it won’t arrive and can’t be recovered.</p>
+  </div>
+</div>
+<div class="modal" id="m-withdraw" hidden role="dialog" aria-modal="true" aria-labelledby="wd-title">
+  <form class="modal-card" id="wd-form" novalidate>
+    <div class="m-head"><h3 id="wd-title">Withdraw testnet ZEC</h3><button type="button" class="x" data-close aria-label="Close">×</button></div>
+    <div class="field"><label for="wd-addr">Testnet shielded or unified address</label><input id="wd-addr" class="code" placeholder="utest1… or ztestsapling1…" autocomplete="off" spellcheck="false"></div>
+    <div class="field"><label for="wd-amt">Amount in dollars</label><input id="wd-amt" inputmode="decimal" placeholder="0.00" autocomplete="off"></div>
+    <div class="muted" id="wd-est" style="font-size:15px">You'll receive about 0.0000 ZEC</div>
+    <p class="err" id="wd-err" role="alert"></p>
+    <button class="btn btn-blue" type="submit">Send testnet ZEC</button>
+  </form>
+</div>
+<div class="modal" id="m-welcome" hidden role="dialog" aria-modal="true" aria-labelledby="welcome-title" data-locked="1">
+  <div class="modal-card">
+    <div class="m-head"><h3 id="welcome-title">Welcome to Hush</h3></div>
+    <p class="muted" style="margin:0">No account, no email. Your vault opens with a passkey or a secret code.</p>
+    <button class="btn btn-blue" id="w-new">Open a new vault</button>
+    <button class="btn btn-line" id="w-passkey" hidden>Sign in with a passkey</button>
+    <button class="btn btn-line" id="w-code-toggle">I have a secret code</button>
+    <form id="w-code-form" class="field" hidden novalidate>
+      <label for="w-code">Secret code</label>
+      <input id="w-code" class="code" placeholder="hush-XXXX-XXXX-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false">
+      <button class="btn btn-blue btn-sm" type="submit" style="align-self:flex-start">Open vault</button>
+    </form>
+    <p class="err" id="w-err" role="alert"></p>
+  </div>
+</div>
+<div class="modal" id="m-code" hidden role="dialog" aria-modal="true" aria-labelledby="code-title" data-locked="1">
+  <div class="modal-card">
+    <div class="m-head"><h3 id="code-title">Keep your vault safe</h3></div>
+    <div class="pk-box" id="pk-box" hidden>
+      <b>Add a passkey</b>
+      <span>Open your vault with Face ID, a fingerprint or your device PIN. No name or email involved.</span>
+      <button class="btn btn-blue btn-sm" id="pk-add-modal">Add a passkey</button>
+      <span class="pk-done" id="pk-done" hidden>Passkey added. You can sign in with it on this device.</span>
+    </div>
+    <p class="muted" style="margin:0">Your secret code is the backup. There's no account and no password reset, so if you lose every way in, the vault is gone. Write the code down or keep it in a password manager.</p>
+    <div class="claim" id="save-code"></div>
+    <button class="btn btn-line btn-sm" id="copy-save-code" style="align-self:flex-start">Copy code</button>
+    <label class="check"><input type="checkbox" id="saved-ok"> I've saved my secret code somewhere safe.</label>
+    <p class="muted" id="saved-hint" style="margin:0;font-size:14px">Add a passkey or tick the box to continue.</p>
+    <button class="btn btn-blue" id="saved-continue" disabled>Continue to my vault</button>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="/vendor/webauthn.js" onerror="this.remove()"></script>
+<script src="/vendor/qrcode.js" onerror="this.remove()"></script>
+<script>
+(() => {
+'use strict';
+const $ = s => document.querySelector(s), $$ = s => Array.from(document.querySelectorAll(s));
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const ZEC_USD = 386.40, SPREAD = .01;
+function rng(seed){ return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+/* eyes follow the pointer */
+const pupils = $$('.pupil').map(el => ({el, cx:+el.getAttribute('cx'), cy:+el.getAttribute('cy'), r:+el.dataset.r}));
+let px0 = innerWidth*.3, py0 = innerHeight*.4, eyeRaf = 0;
+function aim(){
+  eyeRaf = 0;
+  pupils.forEach(p => {
+    const svg = p.el.ownerSVGElement; if (!svg || !svg.getBoundingClientRect().width) return;
+    const m = p.el.parentNode.getScreenCTM ? p.el.parentNode.getScreenCTM() : null; if (!m) return;
+    const sx = m.a*p.cx + m.c*p.cy + m.e, sy = m.b*p.cx + m.d*p.cy + m.f;
+    const dx = px0 - sx, dy = py0 - sy, d = Math.hypot(dx, dy) || 1, k = Math.min(1, d/220);
+    const inv = m.inverse(), ux = inv.a*dx + inv.c*dy, uy = inv.b*dx + inv.d*dy, ud = Math.hypot(ux,uy) || 1;
+    p.el.setAttribute('transform', `translate(${(ux/ud*p.r*k).toFixed(2)} ${(uy/ud*p.r*k).toFixed(2)})`);
+  });
+}
+if (!reduce){
+  addEventListener('pointermove', e => { px0 = e.clientX; py0 = e.clientY; if (!eyeRaf) eyeRaf = requestAnimationFrame(aim); }, {passive:true});
+  addEventListener('scroll', () => { if (!eyeRaf) eyeRaf = requestAnimationFrame(aim); }, {passive:true});
+}
+aim();
+
+/* markets: live from the Hush API (Polymarket), with examples shown until it answers */
+const EXAMPLES = [
+  {id:'zec800', q:'Will ZEC close above $800 on Dec 31, 2026?', cat:'Crypto', yes:.41, vol:2.4e6, ends:'2026-12-31'},
+  {id:'fed', q:'Will the Fed cut rates at its December 2026 meeting?', cat:'Economy', yes:.64, vol:11.8e6, ends:'2026-12-16'},
+  {id:'ars', q:'Will Arsenal win the 2026–27 Premier League?', cat:'Sports', yes:.31, vol:6.1e6, ends:'2027-05-23'},
+  {id:'oscar', q:'Will a non-English film win Best Picture at the 2027 Oscars?', cat:'Culture', yes:.18, vol:1.3e6, ends:'2027-03-14'},
+  {id:'shield30', q:'Will shielded ZEC pass 30% of supply by Dec 31?', cat:'Zcash-native', yes:.52, vol:null, ends:'2026-12-31', source:'native'},
+  {id:'btc150', q:'Will Bitcoin trade above $150k before Jan 1, 2027?', cat:'Crypto', yes:.23, vol:18.2e6, ends:'2026-12-31'},
+  {id:'ng-inf', q:'Will Nigeria’s inflation rate fall below 15% by December?', cat:'Economy', yes:.27, vol:740e3, ends:'2026-12-15'},
+  {id:'ucl', q:'Will an English club win the 2026–27 Champions League?', cat:'Sports', yes:.46, vol:4.4e6, ends:'2027-05-29'},
+  {id:'shtx', q:'Will Zcash process 1M shielded transactions in November?', cat:'Zcash-native', yes:.37, vol:null, ends:'2026-11-30', source:'native'},
+  {id:'eth6k', q:'Will ETH trade above $6,000 in 2026?', cat:'Crypto', yes:.12, vol:9.7e6, ends:'2026-12-31'},
+];
+EXAMPLES.forEach((m,i) => { const r = rng(i*977+13); let v = m.yes + (r()-.5)*.18; m.hist = [];
+  for (let k=0;k<40;k++){ v += (m.yes - v)*.08 + (r()-.5)*.045; v = Math.min(.97,Math.max(.03,v)); m.hist.push(v); }
+  m.hist.push(m.yes); m.prev = m.yes; });
+let MARKETS = EXAMPLES, LIVE = false;
+const KNOWN = new Map(EXAMPLES.map(m => [m.id, m]));
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtVol = v => v == null ? null : v >= 1e6 ? '$' + (v/1e6).toFixed(1) + 'M' : v >= 1e3 ? '$' + Math.round(v/1e3) + 'K' : '$' + Math.round(v);
+const fmtEnds = d => { const t = Date.parse(d); if (isNaN(t)) return ''; const dt = new Date(t), same = dt.getUTCFullYear() === new Date().getUTCFullYear();
+  return dt.toLocaleDateString('en-US', {month:'short', day:'numeric', timeZone:'UTC', ...(same ? {} : {year:'numeric'})}); };
+const fromApi = a => ({ id:a.id, q:a.question, cat:a.category, yes:a.yes, prev:a.yes, vol:a.source === 'native' ? null : a.volume, v24:a.volume24h || 0,
+  ends:a.endDate, hist:(a.history || []).slice(), url:a.url, rule:a.rule, source:a.source, accepting:a.accepting });
+async function fetchBoard(){
+  try { const r = await fetch('/api/markets', {headers:{accept:'application/json'}}); if (!r.ok) return null;
+    const j = await r.json(); return j && Array.isArray(j.markets) && j.markets.length ? j : null; } catch(e){ return null; }
+}
+const byId = id => MARKETS.find(m => m.id === id) || KNOWN.get(id);
+const cents = p => Math.round(p*100) + '¢';
+const usd = n => (n<0?'−':'') + '$' + Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+function spark(m, w=110, h=38){
+  const hs = m.hist.slice(-30), min = Math.min(...hs), max = Math.max(...hs), span = Math.max(max-min,.04);
+  const pts = hs.map((v,i) => [i/(hs.length-1)*(w-6)+3, h-4-(v-min)/span*(h-8)]);
+  const d = pts.map((p,i) => (i?'L':'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join('');
+  const c = m.yes >= hs[0] ? '#0E9F5E' : '#E5402F', e = pts.at(-1);
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}" aria-hidden="true"><path d="${d} L${e[0]} ${h} L3 ${h}Z" fill="${c}" opacity=".1"/><path d="${d}" fill="none" stroke="${c}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="${e[0]}" cy="${e[1]}" r="3.4" fill="${c}" stroke="#fff" stroke-width="1.5"/></svg>`;
+}
+function cardHTML(m){
+  const native = m.source === 'native' || m.cat === 'Zcash-native';
+  const src = native ? `<span title="${esc(m.rule || 'Hush settles this market from public Zcash data.')}">Settled by Hush</span>`
+    : m.url ? `<a href="${esc(m.url)}" target="_blank" rel="noopener">View on Polymarket</a>` : '<span>Polymarket prices</span>';
+  const v = fmtVol(m.vol);
+  return `<article class="mcard" data-id="${esc(m.id)}">
+    <div class="mtop"><span class="cat ${esc(m.cat)}">${esc(m.cat)}</span><span>Ends ${esc(fmtEnds(m.ends))}</span></div>
+    <h3 class="mq">${esc(m.q)}</h3>
+    <div class="mmid"><div class="pct num" data-pct>${Math.round(m.yes*100)}%<small>chance</small></div><div data-spark>${spark(m)}</div></div>
+    <div class="yn"><button class="b-yes" data-bet="yes" data-id="${esc(m.id)}"><span>Yes</span><span data-y>${cents(m.yes)}</span></button><button class="b-no" data-bet="no" data-id="${esc(m.id)}"><span>No</span><span data-n>${cents(1-m.yes)}</span></button></div>
+    <div class="mfoot"><span>${v ? v + ' traded' : 'Hush market'}</span>${src}</div>
+  </article>`;
+}
+function renderLanding(){
+  // The hero features the busiest market of the day: the one most visitors will recognise.
+  const hero = MARKETS.reduce((best, m) => (m.v24 || 0) > (best.v24 || 0) ? m : best, MARKETS[0]), picks = [];
+  for (const c of ['Economy','Sports','Culture','Zcash-native','Crypto']) { const m = MARKETS.find(x => x.cat === c && x !== hero && !picks.includes(x)); if (m) picks.push(m); }
+  for (const m of MARKETS) { if (picks.length >= 4) break; if (m !== hero && !picks.includes(m)) picks.push(m); }
+  $('#hero-card').innerHTML = cardHTML(hero);
+  $('#landing-markets').innerHTML = picks.slice(0,4).map(cardHTML).join('');
+  setTimeout(aim, 0);
+}
+renderLanding();
+
+const ok = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#0E9F5E"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const bad = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#FDE6E3"/><path d="M8 8l8 8M16 8l-8 8" stroke="#E5402F" stroke-width="2.6" stroke-linecap="round"/></svg>';
+$('#cmp').innerHTML = [
+  ['Account or email', 'Usually required', 'Not needed'],
+  ['ID verification', 'Often required', 'Not needed'],
+  ['Wallet connection', 'Required', 'Not needed'],
+  ['Your bets on a public ledger', 'Visible on-chain', 'Never'],
+  ['Payout traceable to you', 'Yes', 'Shielded'],
+].map(r => `<tr><th scope="row" style="font-weight:600">${r[0]}</th><td><span>${bad}${r[1]}</span></td><td class="hush"><span>${ok}${r[2]}</span></td></tr>`).join('');
+
+const io = 'IntersectionObserver' in window ? new IntersectionObserver(([e]) => $('#sticky').classList.toggle('on', !e.isIntersecting && !$('#landing').hidden), {threshold:0}) : null;
+io && io.observe($('.hero-ctas'));
+
+function refresh(m){
+  $$('.mcard').forEach(c => { if (c.dataset.id !== m.id) return;
+    const o = c.querySelector('[data-pct]'); o.innerHTML = `${Math.round(m.yes*100)}%<small>chance</small>`;
+    o.classList.remove('up','down'); void o.offsetWidth; o.classList.add(m.yes > m.prev ? 'up' : 'down'); setTimeout(() => o.classList.remove('up','down'), 1200);
+    c.querySelector('[data-y]').textContent = cents(m.yes); c.querySelector('[data-n]').textContent = cents(1-m.yes);
+    c.querySelector('[data-spark]').innerHTML = spark(m);
+  });
+  if (m.id === state.sel){ $('#px-yes').textContent = cents(m.yes); $('#px-no').textContent = cents(1-m.yes); }
+}
+function markLive(data){
+  const mock = data === 'mock';
+  $$('.price-src').forEach(el => el.textContent = mock ? 'Sample data' : 'Live from Polymarket');
+  $$('.price-src-note').forEach(el => el.textContent = mock ? 'Markets are sample data in mock mode.' : 'Markets and prices are live from Polymarket.');
+}
+function applyBoard(j){
+  const next = j.markets.map(fromApi);
+  next.forEach(m => KNOWN.set(m.id, m));
+  MARKETS = next; LIVE = true; markLive(j.data); renderLanding(); renderGrid();
+  if (state.sel && !MARKETS.some(m => m.id === state.sel)) { state.sel = null; $('#t-body').hidden = true; $('#t-done').hidden = true; $('#t-empty').hidden = false; }
+  renderPositions();
+}
+async function poll(){
+  if (document.hidden) return;
+  const j = await fetchBoard(); if (!j) return;
+  const ids = j.markets.map(a => a.id).join(), cur = MARKETS.map(m => m.id).join();
+  if (!LIVE || ids !== cur) { applyBoard(j); return; }
+  for (const a of j.markets) { const m = byId(a.id); if (!m) continue;
+    if (a.yes !== m.yes) { m.prev = m.yes; m.yes = a.yes; m.hist = (a.history || m.hist).slice(); refresh(m); } }
+  renderPositions();
+}
+// Example mode only: nudge prices so the demo board isn't frozen. Live mode never invents prices.
+if (!reduce) setInterval(() => {
+  if (LIVE || document.hidden) return;
+  const m = MARKETS[Math.floor(Math.random()*MARKETS.length)];
+  m.prev = m.yes; m.yes = Math.min(.97, Math.max(.03, Math.round((m.yes + (Math.random()<.5?-.01:.01))*100)/100));
+  m.hist.push(m.yes); if (m.hist.length > 60) m.hist.shift(); refresh(m); renderPositions();
+}, 2600);
+
+/* ============ APP ============ */
+const state = { bal:250, positions:[], sel:null, side:'yes', cat:'All', q:'', quoteAt:0, quotePx:0, quoteTtl:10000, quoteId:null, qseq:0 };
+function show(view){
+  const v = view === 'app' || view === 'faucet' ? view : 'landing', app = v === 'app';
+  $('#landing').hidden = v !== 'landing'; $('#app').hidden = !app; $('#faucet-view').hidden = v !== 'faucet'; window.scrollTo(0,0);
+  if (app){ $('#sticky').classList.remove('on'); ensureVault().catch(() => {}); }
+  try { history.replaceState(null, '', v === 'landing' ? location.pathname + location.search : '#' + v); } catch(e){}
+  setTimeout(aim, 30);
+}
+document.addEventListener('click', e => { const g = e.target.closest('[data-go]'); if (!g) return;
+  e.preventDefault(); show(g.dataset.go);
+  const href = g.getAttribute('href');
+  if (g.dataset.go === 'landing' && href && href.length > 1 && href !== '#faucet') { const t = document.querySelector(href); t && setTimeout(() => t.scrollIntoView(), 0); }
+  if (g.dataset.then === 'deposit') ensureVault().then(() => $('#open-deposit').click()).catch(() => {});
+});
+function tab(which){ const m = which === 'markets';
+  $('#tab-markets').setAttribute('aria-selected', m); $('#tab-vault').setAttribute('aria-selected', !m);
+  $('#view-markets').hidden = !m; $('#view-vault').hidden = m; if (!m){ renderPositions(); refreshVault(); } }
+$('#tab-markets').onclick = () => tab('markets'); $('#tab-vault').onclick = () => tab('vault');
+const CATS = ['All','Crypto','Economy','Sports','Culture','Zcash-native'];
+$('#filters').innerHTML = CATS.map(c => `<button aria-pressed="${c==='All'}" data-cat="${c}">${c}</button>`).join('');
+$('#filters').addEventListener('click', e => { const b = e.target.closest('[data-cat]'); if (!b) return; state.cat = b.dataset.cat; $$('#filters button').forEach(x => x.setAttribute('aria-pressed', x === b)); renderGrid(); });
+$('#q').addEventListener('input', e => { state.q = e.target.value.trim().toLowerCase(); renderGrid(); });
+function renderGrid(){
+  const list = MARKETS.filter(m => (state.cat==='All' || m.cat===state.cat) && (!state.q || m.q.toLowerCase().includes(state.q)));
+  $('#app-markets').innerHTML = list.length ? list.map(cardHTML).join('') : `<div class="empty">No markets match that search. Try fewer words or another category.</div>`;
+  markSel();
+}
+renderGrid();
+document.addEventListener('click', e => { const b = e.target.closest('[data-bet]'); if (!b) return; if ($('#app').hidden) show('app'); tab('markets'); select(b.dataset.id, b.dataset.bet); });
+function markSel(){ $$('#app-markets .mcard').forEach(c => c.classList.toggle('sel', c.dataset.id === state.sel)); }
+function select(id, side){ state.sel = id; $('#t-empty').hidden = true; $('#t-done').hidden = true; $('#t-body').hidden = false; $('#ticket').classList.add('open'); $('#t-sub').textContent = byId(id).cat + ' market'; markSel(); state.side = side; ensureVault().then(() => setSide(side)).catch(() => {}); }
+function setSide(s){ state.side = s; $('#side-yes').setAttribute('aria-pressed', s==='yes'); $('#side-no').setAttribute('aria-pressed', s==='no'); $('#side-yes').classList.toggle('on', s==='yes'); $('#side-no').classList.toggle('on', s==='no'); quote(); }
+$('#side-yes').onclick = () => setSide('yes'); $('#side-no').onclick = () => setSide('no');
+$('#t-close').onclick = () => $('#ticket').classList.remove('open');
+const pxOf = (m,s) => s==='yes' ? m.yes : 1-m.yes;
+const stakeVal = () => { const v = parseFloat(String($('#stake').value).replace(/[^0-9.]/g,'')); return isFinite(v) ? v : 0; };
+const MICRO = 1e6;
+
+/* ---------- vault: the Hush server when it answers, local practice mode otherwise ---------- */
+const SERVER = { on:false, checked:null };
+const store = {
+  get(){ try { return localStorage.getItem('hush.code'); } catch(e){ return null; } },
+  set(c){ try { localStorage.setItem('hush.code', c); } catch(e){} },
+  clear(){ try { localStorage.removeItem('hush.code'); } catch(e){} },
+};
+const vault = { code:null, ready:null };
+async function api(method, path, body, code = vault.code){
+  const headers = {accept:'application/json'};
+  if (body) headers['content-type'] = 'application/json';
+  if (code) headers.authorization = 'Bearer ' + code;
+  let r;
+  try { r = await fetch(path, {method, headers, body: body ? JSON.stringify(body) : undefined}); }
+  catch(e){ throw Object.assign(new Error('Can’t reach Hush right now. Check your connection and try again.'), {code:'offline'}); }
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw Object.assign(new Error(j.error || 'Something went wrong. Try again.'), {code:j.code, status:r.status});
+  return j;
+}
+function checkServer(){
+  if (!SERVER.checked) SERVER.checked = fetch('/api/health', {headers:{accept:'application/json'}})
+    .then(r => r.ok ? r.json() : null).then(j => { SERVER.on = !!(j && j.network === 'zcash-testnet'); SERVER.wallet = (j && j.wallet) || 'off'; SERVER.price = null; })
+    .catch(() => { SERVER.on = false; })
+    .then(applyMode);
+  return SERVER.checked;
+}
+function applyMode(){
+  $('#restore-form').hidden = !SERVER.on;
+  $('#pk-signin').hidden = !passkeysOK(); renderPasskeys();
+}
+const normCode = s => { const raw = String(s).toUpperCase().replace(/[^A-Z0-9]/g, '').replace(/^HUSH/, '');
+  return raw.length === 20 ? 'hush-' + raw.match(/.{4}/g).join('-') : null; };
+function setCode(code){
+  vault.code = code;
+  const sess = String(code).startsWith('sess_');
+  $('#claim').textContent = sess ? 'Signed in with a passkey. Your secret code isn\u2019t stored on this device.' : code;
+  $('#claim').classList.toggle('blur', !sess); $('#reveal').hidden = sess; $('#copy-claim').hidden = sess;
+}
+const WA = () => window.SimpleWebAuthnBrowser;
+const passkeysOK = () => { try { return SERVER.on && !!WA() && WA().browserSupportsWebAuthn(); } catch(e){ return false; } };
+const pkError = e => e && (e.name === 'NotAllowedError' || e.name === 'AbortError') ? 'Passkey request was cancelled or timed out.' : (e && e.message) || 'Passkeys didn\u2019t work on this device. Use your secret code.';
+async function addPasskey(){
+  const o = await api('POST', '/api/passkeys/register/options');
+  let resp; try { resp = await WA().startRegistration({ optionsJSON:o.options }); } catch(e){ throw new Error(pkError(e)); }
+  const r = await api('POST', '/api/passkeys/register/verify', { challengeId:o.challengeId, response:resp });
+  state.passkeys = r.passkeys; renderPasskeys(); return r;
+}
+async function passkeySignIn(){
+  const o = await api('POST', '/api/passkeys/login/options', null, null);
+  let resp; try { resp = await WA().startAuthentication({ optionsJSON:o.options }); } catch(e){ throw new Error(pkError(e)); }
+  return api('POST', '/api/passkeys/login/verify', { challengeId:o.challengeId, response:resp }, null);
+}
+function renderPasskeys(){
+  $('#pk-row').hidden = !passkeysOK();
+  const n = state.passkeys || 0;
+  $('#pk-count').textContent = n ? `${n} passkey${n > 1 ? 's' : ''} on this vault` : 'No passkeys yet';
+}
+// First visit with no saved vault: let the person choose how to get in.
+let welcomeDone = null;
+function chooseEntry(){
+  return new Promise(resolve => {
+    welcomeDone = resolve;
+    $('#w-passkey').hidden = !passkeysOK(); $('#w-code-form').hidden = true; $('#w-err').textContent = '';
+    openModal('#m-welcome');
+  });
+}
+const finishWelcome = r => { $('#m-welcome').hidden = true; const f = welcomeDone; welcomeDone = null; f && f(r); };
+$('#w-new').onclick = () => finishWelcome({ kind:'new' });
+$('#w-code-toggle').onclick = () => { $('#w-code-form').hidden = false; $('#w-code').focus(); };
+$('#w-passkey').onclick = async () => {
+  $('#w-err').textContent = '';
+  try { const r = await passkeySignIn(); finishWelcome({ kind:'session', token:r.session, vault:r.vault }); }
+  catch(e){ $('#w-err').textContent = e.message; }
+};
+$('#w-code-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const code = normCode($('#w-code').value);
+  if (!code){ $('#w-err').textContent = 'A secret code looks like hush- followed by five groups of four letters and numbers.'; return; }
+  try { const v = await api('GET', '/api/vault', null, code); finishWelcome({ kind:'code', token:code, vault:v }); }
+  catch(err){ $('#w-err').textContent = err.message; }
+});
+$('#pk-add-modal').onclick = async () => {
+  try { await addPasskey(); $('#pk-add-modal').hidden = true; $('#pk-done').hidden = false; $('#saved-continue').disabled = false; $('#saved-hint').hidden = true; }
+  catch(e){ toast(e.message); }
+};
+$('#pk-add').onclick = async () => { try { await addPasskey(); toast('Passkey added to this vault'); } catch(e){ toast(e.message); } };
+$('#pk-signin').onclick = async () => {
+  try { const r = await passkeySignIn(); store.set(r.session); setCode(r.session); vault.ready = Promise.resolve(); applyView(r.vault); toast('Signed in with your passkey'); }
+  catch(e){ $('#restore-err').textContent = e.message; }
+};
+// Tell the user once when a bet settles while they were away.
+function announceResults(){
+  let seen; try { seen = new Set(JSON.parse(localStorage.getItem('hush.seen') || '[]')); } catch(e){ seen = new Set(); }
+  const first = !seen.size, fresh = (state.settled || []).filter(p => !seen.has(p.id) && (p.status === 'won' || p.status === 'lost' || p.status === 'void'));
+  (state.settled || []).forEach(p => seen.add(p.id));
+  try { localStorage.setItem('hush.seen', JSON.stringify([...seen].slice(-500))); } catch(e){}
+  if (first || !fresh.length) return;
+  const p = fresh[0], more = fresh.length > 1 ? ` (+${fresh.length - 1} more)` : '';
+  toast(p.status === 'won' ? `You won: ${usd(p.payout)} added to your vault${more}` : p.status === 'void' ? `A market was voided. ${usd(p.payout)} refunded${more}` : `A bet settled. See your vault${more}`);
+}
+function applyView(v){
+  state.bal = v.balance / MICRO;
+  if (typeof v.passkeys === 'number'){ state.passkeys = v.passkeys; renderPasskeys(); }
+  state.positions = v.positions.filter(p => p.status === 'open').map(p => ({ id:p.id, marketId:p.marketId, question:p.question,
+    side:p.side, shares:p.shares/MICRO, cost:p.cost/MICRO, value:p.value/MICRO }));
+  state.settled = v.positions.filter(p => p.status !== 'open').map(p => ({ id:p.id, question:p.question, side:p.side, status:p.status,
+    cost:p.cost/MICRO, payout:(p.payout || 0)/MICRO, closedAt:p.closedAt }));
+  state.walletAct = v.wallet || null;
+  announceResults();
+  renderPositions();
+}
+async function refreshVault(){
+  if (!SERVER.on || !vault.code) return;
+  try { applyView(await api('GET', '/api/vault')); }
+  catch(e){ if (e.status === 401){ store.clear(); vault.code = null; vault.ready = null; ensureVault().catch(() => {}); } }
+}
+function ensureVault(){
+  if (vault.ready) return vault.ready;
+  vault.ready = (async () => {
+    await checkServer();
+    if (!SERVER.on){ setCode('hush-' + [0,1,2,3,4].map(() => rand(4)).join('-')); return; }
+    const saved = store.get();
+    if (saved){
+      try { const v = await api('GET', '/api/vault', null, saved); setCode(saved); applyView(v); return; }
+      catch(e){ if (e.status !== 401) throw e; store.clear(); }
+    }
+    const choice = await chooseEntry();
+    if (choice.kind !== 'new'){ setCode(choice.token); store.set(choice.token); applyView(choice.vault); toast('Vault opened'); return; }
+    const made = await api('POST', '/api/vaults');
+    setCode(made.code); store.set(made.code); applyView(made.vault);
+    showSaveCode(made.code);
+  })().catch(e => { vault.ready = null; toast(e.message); throw e; });
+  return vault.ready;
+}
+function showSaveCode(code){ $('#save-code').textContent = code; $('#saved-ok').checked = false; $('#saved-continue').disabled = true;
+  const pk = passkeysOK(); $('#pk-box').hidden = !pk; $('#pk-add-modal').hidden = false; $('#pk-done').hidden = true; $('#saved-hint').hidden = false;
+  $('#saved-hint').textContent = pk ? 'Add a passkey or tick the box to continue.' : 'Tick the box to continue.'; openModal('#m-code'); }
+$('#saved-ok').onchange = e => { $('#saved-continue').disabled = !e.target.checked && $('#pk-done').hidden; };
+$('#saved-continue').onclick = () => { $('#m-code').hidden = true; };
+$('#copy-save-code').onclick = () => copy(vault.code, 'Secret code');
+$('#restore-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const code = normCode($('#restore-code').value);
+  if (!code){ $('#restore-err').textContent = 'A secret code looks like hush- followed by five groups of four letters and numbers.'; return; }
+  try { const v = await api('GET', '/api/vault', null, code); store.set(code); setCode(code); vault.ready = Promise.resolve(); applyView(v);
+    $('#restore-err').textContent = ''; $('#restore-code').value = ''; toast('Vault opened on this device'); }
+  catch(err){ $('#restore-err').textContent = err.message; }
+});
+$('#forget').onclick = () => { if (String(vault.code).startsWith('sess_')) api('POST', '/api/sessions/end').catch(() => {}); store.clear(); vault.code = null; vault.ready = null; state.positions = []; state.bal = 0; renderPositions();
+  toast('This device forgot your vault.'); ensureVault().catch(() => {}); };
+
+/* ---------- ticket ---------- */
+const expired = () => performance.now() - state.quoteAt > (state.quoteTtl || 10000);
+async function quote(){
+  const m = byId(state.sel); if (!m) return;
+  $('#t-q').textContent = m.q; $('#px-yes').textContent = cents(m.yes); $('#px-no').textContent = cents(1-m.yes);
+  state.quoteId = null; $('#t-err').textContent = '';
+  if (SERVER.on){
+    const token = state.qseq = (state.qseq || 0) + 1;
+    $('#place').disabled = true; $('#qtext').textContent = 'Getting a price…';
+    try {
+      const q = await api('POST', '/api/quotes', {marketId:state.sel, side:state.side});
+      if (token !== state.qseq) return;
+      state.quoteId = q.id; state.quotePx = q.price / MICRO; state.quoteTtl = q.ttlMs; state.quoteAt = performance.now();
+    } catch(e){
+      if (token !== state.qseq) return;
+      state.quotePx = Math.min(.99, pxOf(m, state.side) + SPREAD); state.quoteAt = -1e9;
+      renderQuote(false); $('#t-err').textContent = e.message; return;
+    }
+  } else {
+    state.quotePx = Math.min(.99, pxOf(m, state.side) + SPREAD); state.quoteTtl = 10000; state.quoteAt = performance.now();
+  }
+  renderQuote();
+}
+function renderQuote(check = true){ const s = stakeVal(), p = state.quotePx, sh = p ? s/p : 0;
+  $('#qt-price').textContent = Math.round(p*100) + '¢'; $('#qt-shares').textContent = sh.toLocaleString('en-US',{maximumFractionDigits:1});
+  $('#qt-fee').textContent = usd(sh*SPREAD); $('#qt-pay').textContent = usd(sh); if (check) validate(); }
+function validate(){ const s = stakeVal(); let msg = '';
+  if (s < 1) msg = 'Enter a stake of at least $1.';
+  else if (s > 500) msg = 'Testnet bets are capped at $500 each.';
+  else if (s > state.bal) msg = 'Your vault doesn’t cover this stake. Deposit testnet ZEC or lower the amount.';
+  $('#t-err').textContent = msg; $('#place').disabled = !!msg && !expired(); return !msg; }
+$('#stake').addEventListener('input', () => renderQuote());
+$$('.chips [data-add]').forEach(b => b.onclick = () => { $('#stake').value = (stakeVal() + +b.dataset.add).toFixed(0); renderQuote(); });
+$('.chips [data-max]').onclick = () => { $('#stake').value = Math.min(500, Math.floor(state.bal)); renderQuote(); };
+setInterval(() => { if ($('#t-body').hidden || (SERVER.on && !state.quoteId && state.quoteAt > 0)) return;
+  const ttl = (state.quoteTtl || 10000) / 1000, left = Math.max(0, ttl - (performance.now() - state.quoteAt)/1000);
+  $('#qring').setAttribute('stroke-dashoffset', (56.5*(1-left/ttl)).toFixed(1));
+  if (left <= 0){ $('#qtext').textContent = 'Price expired. Refresh for a new one.'; $('#place').textContent = 'Refresh price'; $('#place').disabled = false; }
+  else { $('#qtext').textContent = `Price held for ${Math.ceil(left)} seconds`; $('#place').textContent = 'Place bet'; } }, 200);
+$('#place').onclick = async () => {
+  if (expired()){ quote(); return; }
+  if (!validate()) return;
+  const m = byId(state.sel), s = stakeVal(), side = state.side, btn = $('#place');
+  let sh, px = state.quotePx;
+  btn.disabled = true;
+  try {
+    if (SERVER.on){
+      const r = await api('POST', '/api/bets', {quoteId:state.quoteId, stake:Math.round(s*MICRO)});
+      sh = r.shares / MICRO; px = r.price / MICRO; await refreshVault();
+    } else {
+      sh = s/px; state.bal -= s;
+      const ex = state.positions.find(p => p.marketId === m.id && p.side === side);
+      if (ex){ ex.cost += s; ex.shares += sh; } else state.positions.push({id:'local-'+Date.now(), marketId:m.id, question:m.q, side, shares:sh, cost:s});
+      updateBal();
+    }
+  } catch(e){
+    $('#t-err').textContent = e.message; btn.disabled = false;
+    if (e.code === 'quote_expired' || e.code === 'quote_used' || e.code === 'quote_not_found') quote();
+    return;
+  }
+  const st = $('#stamp'); st.classList.remove('go'); void st.offsetWidth; st.classList.add('go');
+  const sideW = side==='yes'?'Yes':'No';
+  $('#done-text').textContent = `${sh.toFixed(1)} ${sideW} shares at ${Math.round(px*100)}¢. If ${sideW} wins, ${usd(sh)} lands in your vault.`;
+  setTimeout(() => { $('#t-body').hidden = true; $('#t-done').hidden = false; }, 1450);
+  toast(`Bet placed: ${sh.toFixed(1)} ${sideW} shares`);
+};
+
+/* ---------- positions ---------- */
+const markOf = p => { const m = byId(p.marketId); return m ? Math.max(.01, pxOf(m, p.side) - SPREAD) : null; };
+const posVal = p => { const k = markOf(p); return k === null ? (p.value ?? 0) : p.shares * k; };
+const posValue = () => state.positions.reduce((a,p) => a + posVal(p), 0);
+function updateBal(){ $('#avail').textContent = usd(state.bal); $('#bal-pill').textContent = usd(state.bal); $('#bal-big').textContent = usd(state.bal); $('#bal-sub').textContent = `Open positions worth ${usd(posValue())}`; }
+function renderSettled(){
+  const list = state.settled || [];
+  $('#settled-panel').hidden = !list.length;
+  if (!list.length) return;
+  const label = { won:'Won', lost:'Lost', sold:'Cashed out', void:'Refunded' };
+  $('#settled').innerHTML = `<table class="ptable"><thead><tr><th>Market</th><th>Side</th><th>Result</th><th>Stake</th><th>Paid</th><th>Profit</th></tr></thead><tbody>${
+    list.map(p => { const pl = p.payout - p.cost;
+      return `<tr><td class="q">${esc(p.question)}</td><td><span class="tag ${p.side}">${p.side==='yes'?'Yes':'No'}</span></td><td><span class="res ${p.status}">${label[p.status] || p.status}</span></td><td>${usd(p.cost)}</td><td>${usd(p.payout)}</td><td class="${pl>=0?'pos':'neg'}">${pl>=0?'+':''}${usd(pl)}</td></tr>`; }).join('')}</tbody></table>`;
+}
+function renderWallet(){
+  const w = state.walletAct, rows = [];
+  if (w){
+    for (const d of w.deposits) rows.push({ at:d.at, kind:'Deposit', amount:`${(d.valueZat/1e8).toFixed(4)} TAZ`,
+      status: d.status === 'credited' ? `<span class="res won">Credited ${usd((d.credited||0)/MICRO)}</span>` : `<span class="res">Confirming ${Math.min(d.confirmations, w.confirmationsNeeded)}/${w.confirmationsNeeded}</span>` });
+    for (const x of w.withdrawals) rows.push({ at:x.at, kind:'Withdrawal', amount:`${(x.valueZat/1e8).toFixed(4)} TAZ`,
+      status: x.status === 'sent' ? `<span class="res won">Sent</span>${x.txid ? ` <span class="code txid">${esc(x.txid.slice(0,10))}…</span>` : ''}` : x.status === 'failed' ? `<span class="res void">Refunded</span>` : `<span class="res">Sending</span>` });
+  }
+  rows.sort((a, b) => b.at - a.at);
+  $('#wallet-panel').hidden = !rows.length;
+  if (!rows.length) return;
+  $('#wallet-act').innerHTML = `<table class="ptable"><thead><tr><th>When</th><th>Type</th><th>Amount</th><th>Status</th></tr></thead><tbody>${
+    rows.map(r => `<tr><td>${new Date(r.at).toLocaleString('en-US', {month:'short', day:'numeric', hour:'numeric', minute:'2-digit'})}</td><td>${r.kind}</td><td>${r.amount}</td><td>${r.status}</td></tr>`).join('')}</tbody></table>`;
+}
+function renderPositions(){ updateBal(); if ($('#view-vault').hidden) return;
+  renderSettled(); renderWallet();
+  if (!state.positions.length){ $('#positions').innerHTML = `<div class="empty">No open positions yet. Pick a market and place a bet to see it here.</div>`; return; }
+  $('#positions').innerHTML = `<table class="ptable"><thead><tr><th>Market</th><th>Side</th><th>Shares</th><th>Cost</th><th>Value</th><th>Profit</th><th></th></tr></thead><tbody>${
+    state.positions.map(p => { const v = posVal(p), pl = v - p.cost;
+      return `<tr><td class="q">${esc(p.question)}</td><td><span class="tag ${p.side}">${p.side==='yes'?'Yes':'No'}</span></td><td>${p.shares.toFixed(1)}</td><td>${usd(p.cost)}</td><td>${usd(v)}</td><td class="${pl>=0?'pos':'neg'}">${pl>=0?'+':''}${usd(pl)}</td><td><button class="btn btn-line btn-sm" data-sell="${esc(p.id)}">Cash out</button></td></tr>`; }).join('')}</tbody></table>`; }
+$('#positions').addEventListener('click', async e => { const b = e.target.closest('[data-sell]'); if (!b) return;
+  const p = state.positions.find(x => x.id === b.dataset.sell); if (!p) return; b.disabled = true;
+  try {
+    if (SERVER.on){ const r = await api('POST', `/api/positions/${encodeURIComponent(p.id)}/sell`); toast(`Cashed out: ${usd(r.payout/MICRO)} back in your vault`); await refreshVault(); }
+    else { const got = posVal(p); state.bal += got; state.positions = state.positions.filter(x => x !== p); toast(`Cashed out: ${usd(got)} back in your vault`); renderPositions(); }
+  } catch(err){ toast(err.message); b.disabled = false; }
+});
+
+const B32 = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+function rand(n){ const a = new Uint8Array(n); try { crypto.getRandomValues(a); } catch(e){ for (let i=0;i<n;i++) a[i] = Math.random()*256|0; } return Array.from(a, x => B32[x % B32.length]).join(''); }
+$('#reveal').onclick = () => { const b = $('#claim').classList.toggle('blur'); $('#reveal').textContent = b ? 'Show code' : 'Hide code'; };
+function copy(text, label){ const fail = () => toast('Copying is blocked here. Select the text and copy it manually.');
+  try { navigator.clipboard.writeText(text).then(() => toast(`${label} copied`), fail); } catch(e){ fail(); } }
+$('#copy-claim').onclick = () => copy(vault.code, 'Code');
+$('#copy-claim-2').onclick = () => copy(vault.code, 'Secret code');
+$('#done-again').onclick = () => { $('#t-done').hidden = true; $('#t-body').hidden = false; quote(); };
+$('#done-vault').onclick = () => { $('#ticket').classList.remove('open'); tab('vault'); };
+
+function openModal(id){ const m = $(id); m.hidden = false; const f = m.querySelector('input, button'); f && f.focus(); }
+function closeModals(){ $$('.modal').forEach(m => { if (!m.dataset.locked) m.hidden = true; }); }
+$$('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m || e.target.closest('[data-close]')) closeModals(); }));
+addEventListener('keydown', e => { if (e.key === 'Escape'){ closeModals(); $('#ticket').classList.remove('open'); } });
+const depAddr = 'utest1' + rand(70).toLowerCase(); $('#dep-addr').textContent = depAddr;
+function drawQR(){
+  const c = $('#qr'), g = c.getContext('2d'), S = 400, N = 29, pad = 24, s = (S-2*pad)/N;
+  const r = rng([...depAddr].reduce((a,ch) => a*31 + ch.charCodeAt(0) | 0, 7)), X = x => pad + x*s;
+  g.fillStyle = '#fff'; g.fillRect(0,0,S,S); g.fillStyle = '#16143B';
+  for (let y=0;y<N;y++) for (let x=0;x<N;x++){ const inF = (x<8&&y<8)||(x>N-9&&y<8)||(x<8&&y>N-9); if (!inF && r() < .48){ g.beginPath(); g.arc(X(x)+s/2, X(y)+s/2, s*.42, 0, 7); g.fill(); } }
+  [[0,0],[N-7,0],[0,N-7]].forEach(([x,y]) => { g.fillStyle='#16143B'; g.fillRect(X(x),X(y),7*s,7*s); g.fillStyle='#fff'; g.fillRect(X(x+1),X(y+1),5*s,5*s); g.fillStyle='#2C2CD8'; g.fillRect(X(x+2),X(y+2),3*s,3*s); });
+  g.fillStyle = '#fff'; g.fillRect(S/2-44, S/2-34, 88, 68); g.fillStyle = '#16143B'; g.beginPath(); g.arc(S/2-16, S/2, 12, 0, 7); g.arc(S/2+16, S/2, 12, 0, 7); g.fill();
+  g.fillStyle = '#fff'; g.beginPath(); g.arc(S/2-14, S/2-2, 5, 0, 7); g.arc(S/2+18, S/2-2, 5, 0, 7); g.fill();
+}
+let shownAddr = depAddr;
+function drawRealQR(text){
+  const c = $('#qr'), g = c.getContext('2d'), S = 400;
+  g.fillStyle = '#fff'; g.fillRect(0, 0, S, S);
+  if (!window.qrcode){ drawQR(); return; }
+  const q = window.qrcode(0, 'M'); q.addData(text); q.make();
+  const n = q.getModuleCount(), quiet = 4, cell = S / (n + quiet * 2);
+  g.fillStyle = '#16143B';
+  for (let r = 0; r < n; r++) for (let k = 0; k < n; k++) if (q.isDark(r, k)) g.fillRect(Math.floor((k + quiet) * cell), Math.floor((r + quiet) * cell), Math.ceil(cell), Math.ceil(cell));
+}
+async function openDeposit(){
+  if (!SERVER.on){ shownAddr = depAddr; $('#dep-addr').textContent = depAddr; drawQR(); $('#dep-live').hidden = false; $('#dep-soon').hidden = true; $('#copy-addr').hidden = false; $('#sim-dep').hidden = false; openModal('#m-deposit'); return; }
+  try { await ensureVault(); } catch(e){ return; }
+  $('#sim-dep').hidden = SERVER.wallet !== 'mock';
+  $('#dep-live').hidden = true; $('#dep-soon').hidden = true; $('#copy-addr').hidden = true;
+  openModal('#m-deposit');
+  try {
+    const r = await api('GET', '/api/deposit-address');
+    shownAddr = r.address; $('#dep-addr').textContent = r.address; drawRealQR(r.address);
+    $('#dep-confs').hidden = false; $('#dep-confs').textContent = `Your vault is credited after ${r.confirmations} testnet confirmations, usually within ten minutes.`;
+    $('#dep-live').hidden = false; $('#copy-addr').hidden = false;
+  } catch(e){
+    if (e.code === 'deposits_off') $('#dep-soon').hidden = false; else { toast(e.message); closeModals(); }
+  }
+}
+$('#open-deposit').onclick = $('#open-deposit-2').onclick = openDeposit;
+$('#copy-addr').onclick = () => copy(shownAddr, 'Address');
+$('#sim-dep').onclick = async () => {
+  if (SERVER.on){
+    try { await api('POST', '/api/dev/mock-deposit', { zec: 0.1 }); await refreshVault(); closeModals(); toast('Mock deposit of 0.1 TAZ credited'); } catch(e){ toast(e.message); }
+    return;
+  }
+  const add = .1*ZEC_USD*.997; state.bal += add; updateBal(); closeModals(); toast(`Deposit confirmed: ${usd(add)} added`);
+};
+$('#open-withdraw').onclick = () => { $('#wd-err').textContent = ''; openModal('#m-withdraw'); };
+$('#wd-amt').addEventListener('input', () => { const v = parseFloat($('#wd-amt').value)||0; $('#wd-est').textContent = `You'll receive about ${(v/ZEC_USD).toFixed(4)} ZEC`; });
+$('#wd-form').addEventListener('submit', e => { e.preventDefault();
+  const a = $('#wd-addr').value.trim(), v = parseFloat($('#wd-amt').value); let err = '';
+  if (!/^(utest1|ztestsapling1)[0-9a-z]{20,}$/.test(a)) err = /^tm/.test(a) ? 'That\u2019s a transparent testnet address. Hush only pays to shielded addresses starting with utest1 or ztestsapling1.' : /^(u1|zs1|t1)/.test(a) ? 'That looks like a mainnet address. Hush testnet only pays to testnet addresses starting with utest1 or ztestsapling1.' : 'Enter a testnet shielded address starting with utest1 or ztestsapling1.';
+  else if (!(v > 0)) err = 'Enter an amount above $0.'; else if (v > state.bal) err = `You have ${usd(state.bal)} available to withdraw.`;
+  $('#wd-err').textContent = err; if (err) return;
+  if (SERVER.on){
+    const btn = $('#wd-form button[type=submit]'); btn.disabled = true;
+    api('POST', '/api/withdrawals', { address:a, amount:Math.round(v * MICRO) })
+      .then(async r => { closeModals(); $('#wd-form').reset(); toast(`Sending ${(r.valueZat / 1e8).toFixed(4)} TAZ. It arrives in a few minutes.`); await refreshVault(); })
+      .catch(e => { $('#wd-err').textContent = e.message; })
+      .finally(() => { btn.disabled = false; });
+    return;
+  }
+  state.bal -= v; updateBal(); closeModals(); $('#wd-form').reset(); toast(`Sending ${(v/ZEC_USD).toFixed(4)} TAZ to a shielded address`); });
+let tt; function toast(t){ const el = $('#toast'); el.textContent = t; el.classList.add('show'); clearTimeout(tt); tt = setTimeout(() => el.classList.remove('show'), 2800); }
+// Community-run Zcash testnet faucets. Edit this list if one goes away.
+const FAUCETS = [
+  { name:'ZECpages testnet faucet', url:'https://faucet.zecpages.com/', note:'Listed in the official Zcash testnet guide.' },
+  { name:'Valar testnet faucet', url:'https://faucet.testnet.valargroup.dev/', note:'Listed in Chainstack\u2019s Zcash network docs.' },
+];
+$('#faucet-primary').href = FAUCETS[0].url;
+$('#faucet-list').innerHTML = FAUCETS.map(f => `<div class="faucet"><b>${esc(f.name)}</b><span>${esc(f.note)}</span><a class="btn btn-blue btn-sm" href="${esc(f.url)}" target="_blank" rel="noopener">Open faucet</a></div>`).join('');
+updateBal();
+checkServer();
+if (location.hash === '#app' || location.hash === '#faucet') show(location.hash.slice(1));
+poll(); setInterval(poll, 15000);
+setInterval(() => { if (!$('#view-vault').hidden) refreshVault(); }, 15000);
+})();
+</script>

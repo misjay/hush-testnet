@@ -1,0 +1,85 @@
+{
+ "markets": [
+  {
+   "id": "600031",
+   "question": "Will a non-English film win Best Picture at the 2027 Oscars?",
+   "slug": "will-a-non-english-film-win-best-picture-at-the-2027-oscars",
+   "conditionId": "0x000000000000000000000000000000000000000000000000000000000000001f",
+   "outcomes": "[\"Yes\", \"No\"]",
+   "outcomePrices": "[\"0.1800\", \"0.8200\"]",
+   "clobTokenIds": "[\"10000000000000000000000000000000000000000000000000000000000000000031001\", \"10000000000000000000000000000000000000000000000000000000000000000031002\"]",
+   "endDate": "2027-03-14T23:00:00Z",
+   "volume": "1300000.0",
+   "volumeNum": 1300000.0,
+   "volume24hr": 40000,
+   "liquidity": "110000",
+   "liquidityNum": 110000,
+   "bestBid": 0.175,
+   "bestAsk": 0.185,
+   "lastTradePrice": 0.18,
+   "spread": 0.01,
+   "active": true,
+   "closed": false,
+   "acceptingOrders": true,
+   "events": [
+    {
+     "slug": "oscars-2027-best-picture"
+    }
+   ]
+  },
+  {
+   "id": "600032",
+   "question": "Will GTA VI release before June 2027?",
+   "slug": "will-gta-vi-release-before-june-2027",
+   "conditionId": "0x0000000000000000000000000000000000000000000000000000000000000020",
+   "outcomes": "[\"Yes\", \"No\"]",
+   "outcomePrices": "[\"0.6200\", \"0.3800\"]",
+   "clobTokenIds": "[\"10000000000000000000000000000000000000000000000000000000000000000032001\", \"10000000000000000000000000000000000000000000000000000000000000000032002\"]",
+   "endDate": "2027-06-01T00:00:00Z",
+   "volume": "5200000.0",
+   "volumeNum": 5200000.0,
+   "volume24hr": 300000,
+   "liquidity": "450000",
+   "liquidityNum": 450000,
+   "bestBid": 0.615,
+   "bestAsk": 0.625,
+   "lastTradePrice": 0.62,
+   "spread": 0.01,
+   "active": true,
+   "closed": false,
+   "acceptingOrders": true,
+   "events": [
+    {
+     "slug": "gta-vi-release"
+    }
+   ]
+  },
+  {
+   "id": "600033",
+   "question": "Will Taylor Swift announce a new album in 2026?",
+   "slug": "will-taylor-swift-announce-a-new-album-in-2026",
+   "conditionId": "0x0000000000000000000000000000000000000000000000000000000000000021",
+   "outcomes": "[\"Yes\", \"No\"]",
+   "outcomePrices": "[\"0.4400\", \"0.5600\"]",
+   "clobTokenIds": "[\"10000000000000000000000000000000000000000000000000000000000000000033001\", \"10000000000000000000000000000000000000000000000000000000000000000033002\"]",
+   "endDate": "2026-12-31T23:59:00Z",
+   "volume": "2600000.0",
+   "volumeNum": 2600000.0,
+   "volume24hr": 120000,
+   "liquidity": "230000",
+   "liquidityNum": 230000,
+   "bestBid": 0.435,
+   "bestAsk": 0.445,
+   "lastTradePrice": 0.44,
+   "spread": 0.01,
+   "active": true,
+   "closed": false,
+   "acceptingOrders": true,
+   "events": [
+    {
+     "slug": "taylor-swift-album-2026"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,112 @@
+{
+ "markets": [
+  {
+   "id": "600021",
+   "question": "Will Arsenal win the 2026\u201327 Premier League?",
+   "slug": "will-arsenal-win-the-2026\u201327-premier-league",
+   "conditionId": "0x0000000000000000000000000000000000000000000000000000000000000015",
+   "outcomes": "[\"Yes\", \"No\"]",
+   "outcomePrices": "[\"0.3100\", \"0.6900\"]",
+   "clobTokenIds": "[\"10000000000000000000000000000000000000000000000000000000000000000021001\", \"10000000000000000000000000000000000000000000000000000000000000000021002\"]",
+   "endDate": "2027-05-23T16:00:00Z",
+   "volume": "6100000.0",
+   "volumeNum": 6100000.0,
+   "volume24hr": 230000,
+   "liquidity": "700000",
+   "liquidityNum": 700000,
+   "bestBid": 0.305,
+   "bestAsk": 0.315,
+   "lastTradePrice": 0.31,
+   "spread": 0.01,
+   "active": true,
+   "closed": false,
+   "acceptingOrders": true,
+   "events": [
+    {
+     "slug": "epl-winner-2026-27"
+    }
+   ]
+  },
+  {
+   "id": "600022",
+   "question": "Will an English club win the 2026\u201327 Champions League?",
+   "slug": "will-an-english-club-win-the-2026\u201327-champions-league",
+   "conditionId": "0x0000000000000000000000000000000000000000000000000000000000000016",
+   "outcomes": "[\"Yes\", \"No\"]",
+   "outcomePrices": "[\"0.4600\", \"0.5400\"]",
+   "clobTokenIds": "[\"10000000000000000000000000000000000000000000000000000000000000000022001\", \"10000000000000000000000000000000000000000000000000000000000000000022002\"]",
+   "endDate": "2027-05-29T21:00:00Z",
+   "volume": "4400000.0",
+   "volumeNum": 4400000.0,
+   "volume24hr": 160000,
+   "liquidity": "390000",
+   "liquidityNum": 390000,
+   "bestBid": 0.455,
+   "bestAsk": 0.465,
+   "lastTradePrice": 0.46,
+   "spread": 0.01,
+   "active": true,
+   "closed": false,
+   "acceptingOrders": true,
+   "events": [
+    {
+     "slug": "ucl-2026-27-english"
+    }
+   ]
+  },
+  {
+   "id": "600023",
+   "question": "Will the Lakers make the 2027 NBA playoffs?",
+   "slug": "will-the-lakers-make-the-2027-nba-playoffs",
+   "conditionId": "0x0000000000000000000000000000000000000000000000000000000000000017",
+   "outcomes": "[\"Yes\", \"No\"]",
+   "outcomePrices": "[\"0.5800\", \"0.4200\"]",
+   "clobTokenIds": "[\"10000000000000000000000000000000000000000000000000000000000000000023001\", \"10000000000000000000000000000000000000000000000000000000000000000023002\"]",
+   "endDate": "2027-04-20T23:00:00Z",
+   "volume": "1900000.0",
+   "volumeNum": 1900000.0,
+   "volume24hr": 70000,
+   "liquidity": "150000",
+   "liquidityNum": 150000,
+   "bestBid": 0.575,
+   "bestAsk": 0.585,
+   "lastTradePrice": 0.58,
+   "spread": 0.01,
+   "active": true,
+   "closed": false,
+   "acceptingOrders": true,
+   "events": [
+    {
+     "slug": "lakers-playoffs-2027"
+    }
+   ]
+  },
+  {
+   "id": "600024",
+   "question": "Closed market example",
+   "slug": "closed-market-example",
+   "conditionId": "0x0000000000000000000000000000000000000000000000000000000000000018",
+   "outcomes": "[\"Yes\", \"No\"]",
+   "outcomePrices": "[\"1\", \"0\"]",
+   "clobTokenIds": "[\"10000000000000000000000000000000000000000000000000000000000000000024001\", \"10000000000000000000000000000000000000000000000000000000000000000024002\"]",
+   "endDate": "2026-10-01T00:00:00Z",
+   "volume": "3000000.0",
+   "volumeNum": 3000000.0,
+   "volume24hr": 0,
+   "liquidity": "0",
+   "liquidityNum": 0,
+   "bestBid": 0.495,
+   "bestAsk": 0.505,
+   "lastTradePrice": 0.5,
+   "spread": 0.01,
+   "active": true,
+   "closed": true,
+   "acceptingOrders": false,
+   "events": [
+    {
+     "slug": "closed-ex"
+    }
+   ]
+  }
+ ]
+}

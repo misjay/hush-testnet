@@ -1,0 +1,112 @@
+{
+ "markets": [
+  {
+   "id": "600011",
+   "question": "Will the Fed cut rates at its December 2026 meeting?",
+   "slug": "will-the-fed-cut-rates-at-its-december-2026-meeting",
+   "conditionId": "0x000000000000000000000000000000000000000000000000000000000000000b",
+   "outcomes": "[\"Yes\", \"No\"]",
+   "outcomePrices": "[\"0.6400\", \"0.3600\"]",
+   "clobTokenIds": "[\"10000000000000000000000000000000000000000000000000000000000000000011001\", \"10000000000000000000000000000000000000000000000000000000000000000011002\"]",
+   "endDate": "2026-12-16T19:00:00Z",
+   "volume": "11800000.0",
+   "volumeNum": 11800000.0,
+   "volume24hr": 520000,
+   "liquidity": "1400000.0",
+   "liquidityNum": 1400000.0,
+   "bestBid": 0.635,
+   "bestAsk": 0.645,
+   "lastTradePrice": 0.64,
+   "spread": 0.01,
+   "active": true,
+   "closed": false,
+   "acceptingOrders": true,
+   "events": [
+    {
+     "slug": "fed-dec-2026"
+    }
+   ]
+  },
+  {
+   "id": "600012",
+   "question": "Will US CPI for November come in above 3.0%?",
+   "slug": "will-us-cpi-for-november-come-in-above-3.0%",
+   "conditionId": "0x000000000000000000000000000000000000000000000000000000000000000c",
+   "outcomes": "[\"Yes\", \"No\"]",
+   "outcomePrices": "[\"0.3800\", \"0.6200\"]",
+   "clobTokenIds": "[\"10000000000000000000000000000000000000000000000000000000000000000012001\", \"10000000000000000000000000000000000000000000000000000000000000000012002\"]",
+   "endDate": "2026-12-10T13:30:00Z",
+   "volume": "2100000.0",
+   "volumeNum": 2100000.0,
+   "volume24hr": 140000,
+   "liquidity": "260000",
+   "liquidityNum": 260000,
+   "bestBid": 0.375,
+   "bestAsk": 0.385,
+   "lastTradePrice": 0.38,
+   "spread": 0.01,
+   "active": true,
+   "closed": false,
+   "acceptingOrders": true,
+   "events": [
+    {
+     "slug": "cpi-nov-2026"
+    }
+   ]
+  },
+  {
+   "id": "600013",
+   "question": "Will the US enter a recession in 2026?",
+   "slug": "will-the-us-enter-a-recession-in-2026",
+   "conditionId": "0x000000000000000000000000000000000000000000000000000000000000000d",
+   "outcomes": "[\"Yes\", \"No\"]",
+   "outcomePrices": "[\"0.1700\", \"0.8300\"]",
+   "clobTokenIds": "[\"10000000000000000000000000000000000000000000000000000000000000000013001\", \"10000000000000000000000000000000000000000000000000000000000000000013002\"]",
+   "endDate": "2026-12-31T23:59:00Z",
+   "volume": "6400000.0",
+   "volumeNum": 6400000.0,
+   "volume24hr": 96000,
+   "liquidity": "510000",
+   "liquidityNum": 510000,
+   "bestBid": 0.165,
+   "bestAsk": 0.175,
+   "lastTradePrice": 0.17,
+   "spread": 0.01,
+   "active": true,
+   "closed": false,
+   "acceptingOrders": true,
+   "events": [
+    {
+     "slug": "us-recession-2026"
+    }
+   ]
+  },
+  {
+   "id": "600014",
+   "question": "Will Nigeria's inflation rate fall below 15% by December 2026?",
+   "slug": "will-nigeria's-inflation-rate-fall-below-15%-by-december-202",
+   "conditionId": "0x000000000000000000000000000000000000000000000000000000000000000e",
+   "outcomes": "[\"Yes\", \"No\"]",
+   "outcomePrices": "[\"0.2700\", \"0.7300\"]",
+   "clobTokenIds": "[\"10000000000000000000000000000000000000000000000000000000000000000014001\", \"10000000000000000000000000000000000000000000000000000000000000000014002\"]",
+   "endDate": "2026-12-15T12:00:00Z",
+   "volume": "740000",
+   "volumeNum": 740000,
+   "volume24hr": 22000,
+   "liquidity": "61000",
+   "liquidityNum": 61000,
+   "bestBid": 0.265,
+   "bestAsk": 0.275,
+   "lastTradePrice": 0.27,
+   "spread": 0.01,
+   "active": true,
+   "closed": false,
+   "acceptingOrders": true,
+   "events": [
+    {
+     "slug": "nigeria-inflation-15"
+    }
+   ]
+  }
+ ]
+}

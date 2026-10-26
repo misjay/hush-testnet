@@ -1,0 +1,33 @@
+# Fly.io config for the Hush web app and API.
+# Deploy:  fly launch --copy-config --no-deploy  →  fly volumes create hush_data --size 1  →  fly deploy
+app = "hush-testnet"            # change to your app name
+primary_region = "lhr"          # pick the region closest to your users
+
+[build]
+
+[env]
+  PORT = "8787"
+  HUSH_DB = "/data/hush.db"
+  HUSH_TRUST_PROXY = "1"
+  # Public address of the site. Passkeys only work on this exact origin (HTTPS).
+  HUSH_ORIGIN = "https://hush-testnet.fly.dev"
+  # Set these as secrets once your Zallet testnet wallet is running (see DEPLOY.md):
+  #   fly secrets set HUSH_ZALLET_URL=... HUSH_ZALLET_USER=... HUSH_ZALLET_PASSWORD=...
+
+[mounts]
+  source = "hush_data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 8787
+  force_https = true
+  auto_stop_machines = "off"     # keep the sync and wallet loops running
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    grace_period = "20s"
+    interval = "30s"
+    method = "GET"
+    path = "/api/health"
+    timeout = "5s"

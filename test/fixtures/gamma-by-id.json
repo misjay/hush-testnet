@@ -1,0 +1,110 @@
+{
+ "600024": {
+  "id": "600024",
+  "question": "Closed market example",
+  "slug": "closed-market-example",
+  "conditionId": "0x0000000000000000000000000000000000000000000000000000000000000018",
+  "outcomes": "[\"Yes\", \"No\"]",
+  "outcomePrices": "[\"1\", \"0\"]",
+  "clobTokenIds": "[\"10000000000000000000000000000000000000000000000000000000000000000024001\", \"10000000000000000000000000000000000000000000000000000000000000000024002\"]",
+  "endDate": "2026-10-01T00:00:00Z",
+  "volume": "3000000.0",
+  "volumeNum": 3000000.0,
+  "volume24hr": 0,
+  "liquidity": "0",
+  "liquidityNum": 0,
+  "bestBid": 0.495,
+  "bestAsk": 0.505,
+  "lastTradePrice": 0.5,
+  "spread": 0.01,
+  "active": true,
+  "closed": true,
+  "acceptingOrders": false,
+  "events": [
+   {
+    "slug": "closed-ex"
+   }
+  ]
+ },
+ "600011": {
+  "id": "600011",
+  "question": "Will the Fed cut rates at its December 2026 meeting?",
+  "slug": "will-the-fed-cut-rates-at-its-december-2026-meeting",
+  "conditionId": "0x000000000000000000000000000000000000000000000000000000000000000b",
+  "outcomes": "[\"Yes\", \"No\"]",
+  "outcomePrices": "[\"1\", \"0\"]",
+  "clobTokenIds": "[\"10000000000000000000000000000000000000000000000000000000000000000011001\", \"10000000000000000000000000000000000000000000000000000000000000000011002\"]",
+  "endDate": "2026-12-16T19:00:00Z",
+  "volume": "11800000.0",
+  "volumeNum": 11800000.0,
+  "volume24hr": 520000,
+  "liquidity": "1400000.0",
+  "liquidityNum": 1400000.0,
+  "bestBid": null,
+  "bestAsk": null,
+  "lastTradePrice": 0.64,
+  "spread": 0.01,
+  "active": false,
+  "closed": true,
+  "acceptingOrders": false,
+  "events": [
+   {
+    "slug": "fed-dec-2026"
+   }
+  ]
+ },
+ "600012": {
+  "id": "600012",
+  "question": "Will US CPI for November come in above 3.0%?",
+  "slug": "will-us-cpi-for-november-come-in-above-3.0%",
+  "conditionId": "0x000000000000000000000000000000000000000000000000000000000000000c",
+  "outcomes": "[\"Yes\", \"No\"]",
+  "outcomePrices": "[\"0.38\", \"0.62\"]",
+  "clobTokenIds": "[\"10000000000000000000000000000000000000000000000000000000000000000012001\", \"10000000000000000000000000000000000000000000000000000000000000000012002\"]",
+  "endDate": "2026-12-10T13:30:00Z",
+  "volume": "2100000.0",
+  "volumeNum": 2100000.0,
+  "volume24hr": 140000,
+  "liquidity": "260000",
+  "liquidityNum": 260000,
+  "bestBid": 0.375,
+  "bestAsk": 0.385,
+  "lastTradePrice": 0.38,
+  "spread": 0.01,
+  "active": true,
+  "closed": true,
+  "acceptingOrders": false,
+  "events": [
+   {
+    "slug": "cpi-nov-2026"
+   }
+  ]
+ },
+ "600013": {
+  "id": "600013",
+  "question": "Will the US enter a recession in 2026?",
+  "slug": "will-the-us-enter-a-recession-in-2026",
+  "conditionId": "0x000000000000000000000000000000000000000000000000000000000000000d",
+  "outcomes": "[\"Yes\", \"No\"]",
+  "outcomePrices": "[\"0.1700\", \"0.8300\"]",
+  "clobTokenIds": "[\"10000000000000000000000000000000000000000000000000000000000000000013001\", \"10000000000000000000000000000000000000000000000000000000000000000013002\"]",
+  "endDate": "2026-12-31T23:59:00Z",
+  "volume": "6400000.0",
+  "volumeNum": 6400000.0,
+  "volume24hr": 96000,
+  "liquidity": "510000",
+  "liquidityNum": 510000,
+  "bestBid": 0.29,
+  "bestAsk": 0.31,
+  "lastTradePrice": 0.17,
+  "spread": 0.01,
+  "active": true,
+  "closed": false,
+  "acceptingOrders": true,
+  "events": [
+   {
+    "slug": "us-recession-2026"
+   }
+  ]
+ }
+}

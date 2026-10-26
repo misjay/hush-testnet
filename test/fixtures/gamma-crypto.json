@@ -1,0 +1,202 @@
+{
+ "markets": [
+  {
+   "id": "600001",
+   "question": "Will Bitcoin reach $150,000 by December 31, 2026?",
+   "slug": "will-bitcoin-reach-$150,000-by-december-31,-2026",
+   "conditionId": "0x0000000000000000000000000000000000000000000000000000000000000001",
+   "outcomes": "[\"Yes\", \"No\"]",
+   "outcomePrices": "[\"0.2300\", \"0.7700\"]",
+   "clobTokenIds": "[\"10000000000000000000000000000000000000000000000000000000000000000001001\", \"10000000000000000000000000000000000000000000000000000000000000000001002\"]",
+   "endDate": "2026-12-31T23:59:00Z",
+   "volume": "18200000.0",
+   "volumeNum": 18200000.0,
+   "volume24hr": 410000,
+   "liquidity": "920000",
+   "liquidityNum": 920000,
+   "bestBid": 0.225,
+   "bestAsk": 0.235,
+   "lastTradePrice": 0.23,
+   "spread": 0.01,
+   "active": true,
+   "closed": false,
+   "acceptingOrders": true,
+   "events": [
+    {
+     "slug": "bitcoin-150k-2026"
+    }
+   ]
+  },
+  {
+   "id": "600002",
+   "question": "Will ETH trade above $6,000 in 2026?",
+   "slug": "will-eth-trade-above-$6,000-in-2026",
+   "conditionId": "0x0000000000000000000000000000000000000000000000000000000000000002",
+   "outcomes": "[\"Yes\", \"No\"]",
+   "outcomePrices": "[\"0.1200\", \"0.8800\"]",
+   "clobTokenIds": "[\"10000000000000000000000000000000000000000000000000000000000000000002001\", \"10000000000000000000000000000000000000000000000000000000000000000002002\"]",
+   "endDate": "2026-12-31T23:59:00Z",
+   "volume": "9700000.0",
+   "volumeNum": 9700000.0,
+   "volume24hr": 190000,
+   "liquidity": "410000",
+   "liquidityNum": 410000,
+   "bestBid": 0.115,
+   "bestAsk": 0.125,
+   "lastTradePrice": 0.12,
+   "spread": 0.01,
+   "active": true,
+   "closed": false,
+   "acceptingOrders": true,
+   "events": [
+    {
+     "slug": "eth-6k-2026"
+    }
+   ]
+  },
+  {
+   "id": "600003",
+   "question": "Will ZEC close above $800 on December 31, 2026?",
+   "slug": "will-zec-close-above-$800-on-december-31,-2026",
+   "conditionId": "0x0000000000000000000000000000000000000000000000000000000000000003",
+   "outcomes": [
+    "Yes",
+    "No"
+   ],
+   "outcomePrices": [
+    "0.4100",
+    "0.5900"
+   ],
+   "clobTokenIds": [
+    "10000000000000000000000000000000000000000000000000000000000000000003001",
+    "10000000000000000000000000000000000000000000000000000000000000000003002"
+   ],
+   "endDate": "2026-12-31T23:59:00Z",
+   "volume": "2400000.0",
+   "volumeNum": 2400000.0,
+   "volume24hr": 88000,
+   "liquidity": "120000",
+   "liquidityNum": 120000,
+   "bestBid": 0.405,
+   "bestAsk": 0.415,
+   "lastTradePrice": 0.41,
+   "spread": 0.01,
+   "active": true,
+   "closed": false,
+   "acceptingOrders": true,
+   "events": [
+    {
+     "slug": "zec-800-2026"
+    }
+   ]
+  },
+  {
+   "id": "600004",
+   "question": "Will Solana flip Ethereum by market cap in 2026?",
+   "slug": "will-solana-flip-ethereum-by-market-cap-in-2026",
+   "conditionId": "0x0000000000000000000000000000000000000000000000000000000000000004",
+   "outcomes": "[\"Yes\", \"No\"]",
+   "outcomePrices": "[\"0.0400\", \"0.9600\"]",
+   "clobTokenIds": "[\"10000000000000000000000000000000000000000000000000000000000000000004001\", \"10000000000000000000000000000000000000000000000000000000000000000004002\"]",
+   "endDate": "2026-12-31T23:59:00Z",
+   "volume": "3100000.0",
+   "volumeNum": 3100000.0,
+   "volume24hr": 12000,
+   "liquidity": "90000",
+   "liquidityNum": 90000,
+   "bestBid": 0.035,
+   "bestAsk": 0.045,
+   "lastTradePrice": 0.04,
+   "spread": 0.01,
+   "active": true,
+   "closed": false,
+   "acceptingOrders": true,
+   "events": [
+    {
+     "slug": "sol-flip-eth"
+    }
+   ]
+  },
+  {
+   "id": "600005",
+   "question": "Which coin will perform best in November?",
+   "slug": "which-coin-will-perform-best-in-november",
+   "conditionId": "0x0000000000000000000000000000000000000000000000000000000000000005",
+   "outcomes": "[\"BTC\", \"ETH\"]",
+   "outcomePrices": "[\"0.3000\", \"0.7000\"]",
+   "clobTokenIds": "[\"10000000000000000000000000000000000000000000000000000000000000000005001\", \"10000000000000000000000000000000000000000000000000000000000000000005002\"]",
+   "endDate": "2026-11-30T23:59:00Z",
+   "volume": "4000000.0",
+   "volumeNum": 4000000.0,
+   "volume24hr": 50000,
+   "liquidity": "80000",
+   "liquidityNum": 80000,
+   "bestBid": 0.295,
+   "bestAsk": 0.305,
+   "lastTradePrice": 0.3,
+   "spread": 0.01,
+   "active": true,
+   "closed": false,
+   "acceptingOrders": true,
+   "events": [
+    {
+     "slug": "best-coin-nov"
+    }
+   ]
+  },
+  {
+   "id": "600006",
+   "question": "Tiny market nobody trades?",
+   "slug": "tiny-market-nobody-trades",
+   "conditionId": "0x0000000000000000000000000000000000000000000000000000000000000006",
+   "outcomes": "[\"Yes\", \"No\"]",
+   "outcomePrices": "[\"0.5000\", \"0.5000\"]",
+   "clobTokenIds": "[\"10000000000000000000000000000000000000000000000000000000000000000006001\", \"10000000000000000000000000000000000000000000000000000000000000000006002\"]",
+   "endDate": "2026-12-31T23:59:00Z",
+   "volume": "12000",
+   "volumeNum": 12000,
+   "volume24hr": 10,
+   "liquidity": "500",
+   "liquidityNum": 500,
+   "bestBid": 0.495,
+   "bestAsk": 0.505,
+   "lastTradePrice": 0.5,
+   "spread": 0.01,
+   "active": true,
+   "closed": false,
+   "acceptingOrders": true,
+   "events": [
+    {
+     "slug": "tiny"
+    }
+   ]
+  },
+  {
+   "id": "600007",
+   "question": "Will Bitcoin hit $50k in 2026?",
+   "slug": "will-bitcoin-hit-$50k-in-2026",
+   "conditionId": "0x0000000000000000000000000000000000000000000000000000000000000007",
+   "outcomes": "[\"Yes\", \"No\"]",
+   "outcomePrices": "[\"0.9950\", \"0.0050\"]",
+   "clobTokenIds": "[\"10000000000000000000000000000000000000000000000000000000000000000007001\", \"10000000000000000000000000000000000000000000000000000000000000000007002\"]",
+   "endDate": "2026-12-31T23:59:00Z",
+   "volume": "7000000.0",
+   "volumeNum": 7000000.0,
+   "volume24hr": 1000,
+   "liquidity": "200000",
+   "liquidityNum": 200000,
+   "bestBid": 0.99,
+   "bestAsk": 1.0,
+   "lastTradePrice": 0.995,
+   "spread": 0.01,
+   "active": true,
+   "closed": false,
+   "acceptingOrders": true,
+   "events": [
+    {
+     "slug": "btc-50k"
+    }
+   ]
+  }
+ ]
+}

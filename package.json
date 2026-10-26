@@ -1,0 +1,27 @@
+{
+  "name": "hush-testnet",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Hush: private prediction markets on Zcash testnet, mirroring live Polymarket markets.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "start": "node --use-env-proxy --disable-warning=ExperimentalWarning --disable-warning=UNDICI-EHPA src/server.ts",
+    "dev": "node --use-env-proxy --disable-warning=ExperimentalWarning --disable-warning=UNDICI-EHPA --watch src/server.ts",
+    "settle": "node --disable-warning=ExperimentalWarning src/admin.ts",
+    "mock": "cross-env HUSH_MOCK=1 node --disable-warning=ExperimentalWarning src/server.ts",
+    "test": "node --disable-warning=ExperimentalWarning --test test/*.test.ts"
+  },
+  "dependencies": {
+    "@fastify/static": "^8.3.0",
+    "@simplewebauthn/browser": "^13.3.0",
+    "@simplewebauthn/server": "^13.3.3",
+    "fastify": "^5.12.7",
+    "qrcode-generator": "^1.4.4"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0"
+  }
+}
