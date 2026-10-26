@@ -10,7 +10,7 @@ primary_region = "lhr"          # pick the region closest to your users
   HUSH_DB = "/data/hush.db"
   HUSH_TRUST_PROXY = "1"
   # Public address of the site. Passkeys only work on this exact origin (HTTPS).
-  HUSH_ORIGIN = "https://hush-testnet.fly.dev"
+  HUSH_ORIGIN = "https://justhushit.xyz, https://www.justhushit.xyz, https://hush-testnet.fly.dev"
   # Set these as secrets once your Zallet testnet wallet is running (see DEPLOY.md):
   #   fly secrets set HUSH_ZALLET_URL=... HUSH_ZALLET_USER=... HUSH_ZALLET_PASSWORD=...
 
