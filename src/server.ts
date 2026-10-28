@@ -56,6 +56,17 @@ export function buildServer(db: Db, opts: { wallet?: ZcashWallet | null } = {}) 
   // Set HUSH_TRUST_PROXY=1 when running behind a reverse proxy so per-IP limits see the real client.
   const app = Fastify({ logger: false, trustProxy: process.env.HUSH_TRUST_PROXY === '1', bodyLimit: 16 * 1024 });
 
+  // Security headers for browser defense
+  app.addHook('onSend', async (_req, reply) => {
+    reply.header('X-Content-Type-Options', 'nosniff');
+    reply.header('X-Frame-Options', 'DENY');
+    reply.header('Referrer-Policy', 'strict-origin-when-cross-origin');
+    reply.header('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+    if (process.env.NODE_ENV === 'production') {
+      reply.header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+    }
+  });
+
   app.register(fastifyStatic, { root: fileURLToPath(new URL('../web/', import.meta.url)), index: ['index.html'] });
 
   app.get('/api/health', async () => ({
@@ -109,18 +120,38 @@ export function buildServer(db: Db, opts: { wallet?: ZcashWallet | null } = {}) 
     return id;
   };
 
-  // Light limit on vault creation per IP so the practice grant can't be farmed. Kept in memory only.
-  const created = new Map<string, number[]>();
-  const allowCreate = (ip: string, now = Date.now()) => {
-    const recent = (created.get(ip) ?? []).filter((t) => now - t < 3600_000);
-    if (recent.length >= vaultLimitPerHour) return false;
-    recent.push(now);
-    created.set(ip, recent);
-    return true;
-  };
+  // Memory-safe sliding window rate limiter with periodic cleanup
+  class SlidingRateLimiter {
+    private hits = new Map<string, number[]>();
+    private limit: number;
+    private windowMs: number;
+    constructor(limit: number, windowMs: number) {
+      this.limit = limit;
+      this.windowMs = windowMs;
+    }
+    allow(key: string, now = Date.now()): boolean {
+      if (this.hits.size > 1000) {
+        for (const [k, timestamps] of this.hits.entries()) {
+          const fresh = timestamps.filter((t) => now - t < this.windowMs);
+          if (fresh.length === 0) this.hits.delete(k);
+          else this.hits.set(k, fresh);
+        }
+      }
+      const recent = (this.hits.get(key) ?? []).filter((t) => now - t < this.windowMs);
+      if (recent.length >= this.limit) return false;
+      recent.push(now);
+      this.hits.set(key, recent);
+      return true;
+    }
+  }
+
+  const vaultLimiter = new SlidingRateLimiter(vaultLimitPerHour, 3600_000);
+  const loginLimiter = new SlidingRateLimiter(30, 60_000);
+  const quoteLimiter = new SlidingRateLimiter(60, 60_000);
+  const betLimiter = new SlidingRateLimiter(30, 60_000);
 
   app.post('/api/vaults', async (req, reply) => {
-    if (!allowCreate(req.ip)) throw new VaultError('rate_limited', 'Too many new vaults from this network. Try again in an hour, or restore one with its code.', 429);
+    if (!vaultLimiter.allow(req.ip)) throw new VaultError('rate_limited', 'Too many new vaults from this network. Try again in an hour, or restore one with its code.', 429);
     const { code, vaultId } = createVault(db);
     reply.code(201).header('cache-control', 'no-store');
     return { code, vault: { ...vaultView(db, vaultId), passkeys: 0 } };
@@ -168,7 +199,10 @@ export function buildServer(db: Db, opts: { wallet?: ZcashWallet | null } = {}) 
   app.post<{ Body: { challengeId: string; response: unknown } }>('/api/passkeys/register/verify', {
     schema: { body: { type: 'object', required: ['challengeId', 'response'], properties: { challengeId: { type: 'string', maxLength: 64 }, response: { type: 'object' } } } },
   }, async (req) => verifyRegistration(db, rp, vaultFrom(req), req.body.challengeId, req.body.response));
-  app.post('/api/passkeys/login/options', async () => loginOptions(db, rp));
+  app.post('/api/passkeys/login/options', async (req) => {
+    if (!loginLimiter.allow(req.ip)) throw new VaultError('rate_limited', 'Too many login attempts. Please wait a minute and try again.', 429);
+    return loginOptions(db, rp);
+  });
   app.post<{ Body: { challengeId: string; response: unknown } }>('/api/passkeys/login/verify', {
     schema: { body: { type: 'object', required: ['challengeId', 'response'], properties: { challengeId: { type: 'string', maxLength: 64 }, response: { type: 'object' } } } },
   }, async (req, reply) => {
@@ -180,11 +214,15 @@ export function buildServer(db: Db, opts: { wallet?: ZcashWallet | null } = {}) 
 
   app.post<{ Body: { marketId: string; side: 'yes' | 'no' } }>('/api/quotes', {
     schema: { body: { type: 'object', required: ['marketId', 'side'], properties: { marketId: { type: 'string', maxLength: 100 }, side: { enum: ['yes', 'no'] } } } },
-  }, async (req) => quote(db, vaultFrom(req), req.body.marketId, req.body.side));
+  }, async (req) => {
+    if (!quoteLimiter.allow(req.ip)) throw new VaultError('rate_limited', 'Too many quote requests. Please wait a moment.', 429);
+    return quote(db, vaultFrom(req), req.body.marketId, req.body.side);
+  });
 
   app.post<{ Body: { quoteId: string; stake: number } }>('/api/bets', {
     schema: { body: { type: 'object', required: ['quoteId', 'stake'], properties: { quoteId: { type: 'string', maxLength: 64 }, stake: { type: 'integer', minimum: 1 } } } },
   }, async (req, reply) => {
+    if (!betLimiter.allow(req.ip)) throw new VaultError('rate_limited', 'Too many bets placed in a short window. Please wait a moment.', 429);
     const r = placeBet(db, vaultFrom(req), req.body.quoteId, req.body.stake);
     reply.code(201);
     return r;
